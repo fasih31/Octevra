@@ -1,4 +1,4 @@
-# 🧠 Octevra AI-OS Nexus
+# 🧠 Orkavia AI-OS Nexus
 
 > **© 2026 Fasih ur Rehman. All Rights Reserved.**
 
@@ -11,7 +11,7 @@ A dual-mode AI Operating System — public knowledge assistant + private AI OS w
 
 ## Overview
 
-Octevra AI-OS Nexus is a self-contained, privacy-first AI platform operating in two modes:
+Orkavia AI-OS Nexus is a self-contained, privacy-first AI platform operating in two modes:
 
 | Mode | Description |
 |------|-------------|
@@ -110,5 +110,5 @@ docker-compose up --build
 
 ---
 
-*Octevra AI-OS Nexus is proprietary software. See `LICENSE` for terms.*
+*Orkavia AI-OS Nexus is proprietary software. See `LICENSE` for terms.*
 *© 2026 Fasih ur Rehman. All Rights Reserved.*

@@ -1,5 +1,5 @@
 /**
- * Octevra AI-OS Nexus — Single Page Application
+ * Orkavia AI-OS Nexus — Single Page Application
  * © 2026 Fasih ur Rehman. All Rights Reserved.
  *
  * Hash-based SPA router, API client, chat, sensors, memory, admin, audit
