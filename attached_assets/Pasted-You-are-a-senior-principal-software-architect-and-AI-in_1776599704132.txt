@@ -1,0 +1,243 @@
+You are a senior principal software architect and AI infrastructure engineer.
+
+Design and implement a production-grade system called:
+
+🧠 AI-OS Nexus
+
+A dual-mode autonomous AI operating system with:
+- Public AI assistant mode (stateless, no persistent user memory)
+- Private AI OS mode (full consent-based memory + IoT + personal data integration)
+
+This system must be:
+- fully modular
+- privacy-first
+- enterprise scalable
+- self-hostable
+- GitHub-based deployment ready
+- legally compliant with open data usage
+
+------------------------------------------------------------
+🏗️ CORE SYSTEM OBJECTIVE
+------------------------------------------------------------
+
+Build an AI platform that functions as:
+
+1. Conversational AI system (public + private modes)
+2. Consent-driven memory operating system
+3. Hybrid ultra-fast search engine (Tri-Index architecture)
+4. IoT + hardware decision automation engine
+5. Autonomous reasoning + planning system
+6. Report / BRD / documentation generator
+7. Secure multi-tenant data isolation system
+8. GitHub-native data + version-controlled knowledge system
+
+------------------------------------------------------------
+📦 DATA ARCHITECTURE (IMPORTANT UPGRADE)
+------------------------------------------------------------
+
+All datasets MUST be self-hosted via GitHub-based versioning:
+
+### RULES:
+- All data must be stored in GitHub repository under /datasets
+- Use dataset transformation pipeline instead of raw copying
+- Convert all external data into:
+  - cleaned text
+  - embeddings
+  - structured JSON metadata
+- NEVER store or redistribute raw copyrighted content
+- Only store derived representations (safe + legal)
+
+### DATA SOURCES (LEGAL ONLY):
+- Wikipedia dumps (processed into JSON chunks)
+- Project Gutenberg (public domain)
+- The Stack (licensed subset)
+- Open instruction datasets (Dolly, Alpaca, HH-RLHF)
+
+------------------------------------------------------------
+🧠 CORE ARCHITECTURE (MANDATORY)
+------------------------------------------------------------
+
+1. LLM CORE LAYER
+   - Abstract LLM interface
+   - Support local models (Mistral / Llama 3 compatible)
+   - Allow model swapping (plugin architecture)
+
+2. KNOWLEDGE PROCESSING LAYER
+   - Data ingestion pipeline
+   - Chunking system (semantic + structural)
+   - Embedding generator
+   - GitHub-based dataset versioning
+
+3. MEMORY OPERATING SYSTEM (CRITICAL)
+   - Consent-based memory engine per message
+   - Memory types:
+     NONE → not stored
+     PRIVATE → encrypted per user
+     ANON_LEARN → anonymized aggregate learning
+     PUBLIC → shared knowledge base
+
+   MUST INCLUDE:
+   - encryption per user ID
+   - memory expiry system
+   - revocation (delete memory anytime)
+   - audit log for memory access
+
+4. TRI-INDEX SEARCH ENGINE (CORE INNOVATION)
+   Implement hybrid retrieval system:
+
+   INDEX 1: Semantic Vector Search (FAISS)
+   INDEX 2: Keyword Search (SQLite FTS5)
+   INDEX 3: Personal Memory Timeline Index
+
+   Merge algorithm:
+   final_score =
+       semantic_score * 0.5 +
+       keyword_score * 0.3 +
+       memory_relevance * 0.2
+
+   Must support:
+   - caching layer
+   - async search execution
+   - sub-100ms response target
+
+5. DECISION ENGINE (AI + RULE HYBRID)
+   - AI reasoning layer (LLM)
+   - deterministic rule engine fallback
+   - supports real-world domains:
+
+     Agriculture:
+       - irrigation control
+       - crop hydration prediction
+
+     Healthcare:
+       - stress detection
+       - anomaly alerts
+
+     Industry:
+       - machine failure prediction
+       - safety shutdown triggers
+
+   MUST INCLUDE:
+   - confidence scoring
+   - safety threshold gating
+   - human override mode
+
+6. IOT / SENSOR LAYER
+   - Accept JSON sensor streams
+   - MQTT + HTTP ingestion support
+   - Edge agent simulator included
+   - real-time event triggers
+
+   Example devices:
+   - soil sensors
+   - heart rate monitors
+   - industrial vibration sensors
+
+7. API LAYER (FASTAPI)
+   Must implement:
+
+   /ask        → conversational AI
+   /memory     → memory read/write
+   /sensor     → IoT ingestion
+   /report     → generate BRD/reports
+   /admin      → system control panel
+
+8. PUBLIC vs PRIVATE MODES (STRICT SEPARATION)
+
+PUBLIC MODE:
+- no persistent memory
+- only knowledge base access
+- anonymized learning optional
+
+PRIVATE MODE:
+- full memory access
+- encrypted user data vault
+- IoT + file system access
+- personal reasoning context
+
+ABSOLUTE RULE:
+No private data may ever leak into public system.
+
+------------------------------------------------------------
+🔐 PRIVACY & SECURITY REQUIREMENTS
+------------------------------------------------------------
+
+MANDATORY:
+- AES-256 encryption per user
+- strict namespace isolation
+- consent required for all memory storage
+- memory expiry system (TTL-based deletion)
+- audit logs for every memory access
+
+------------------------------------------------------------
+⚡ PERFORMANCE REQUIREMENTS
+------------------------------------------------------------
+
+- sub-second query response target
+- async architecture (FastAPI + background workers)
+- caching layer for frequent queries
+- scalable to multi-user system
+- modular plugin system for future expansion
+
+------------------------------------------------------------
+🧱 DEVELOPMENT PHASE OUTPUT (IMPORTANT)
+------------------------------------------------------------
+
+STEP 1:
+Generate full folder structure with explanation
+
+STEP 2:
+Create base modules:
+
+- llm_core.py
+- tri_index_engine.py
+- memory_os.py
+- consent_engine.py
+- decision_engine.py
+- sensor_ingest.py
+- api_server.py
+
+STEP 3:
+Implement minimal working system:
+- chat endpoint
+- memory storage with consent
+- basic search engine
+
+STEP 4:
+Add IoT simulation:
+- irrigation example
+- hospital monitoring example
+- fake sensor generator
+
+STEP 5:
+Add safety layer:
+- rule-based override system
+- confidence threshold rejection
+- emergency stop logic
+
+------------------------------------------------------------
+🧠 IMPORTANT DESIGN PHILOSOPHY
+------------------------------------------------------------
+
+This system is NOT a chatbot.
+
+It is:
+
+> "A self-learning distributed AI operating system that connects human knowledge, memory, and physical-world devices through secure, consent-driven intelligence."
+
+------------------------------------------------------------
+📌 FINAL OUTPUT REQUIREMENTS
+------------------------------------------------------------
+
+- production-level Python code
+- modular architecture
+- clean separation of concerns
+- real-world scalable structure
+- GitHub-ready repository design
+- no pseudo-code unless absolutely necessary
+- include inline architecture comments
+
+Start by generating:
+1. system architecture overview
+2. GitHub folder structure
+3. core engine skeleton implementation

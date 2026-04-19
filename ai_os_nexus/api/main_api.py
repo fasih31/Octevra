@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 # Default is localhost for development; override via CORS_ORIGINS env var
 # (comma-separated list of origins, e.g. "https://app.example.com").
 # ---------------------------------------------------------------------------
-_raw_origins = os.environ.get("CORS_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000")
+_raw_origins = os.environ.get("CORS_ORIGINS", "*")
 ALLOWED_ORIGINS: list[str] = [o.strip() for o in _raw_origins.split(",") if o.strip()]
 
 # ---------------------------------------------------------------------------
@@ -110,22 +110,19 @@ async def security_headers_middleware(request: Request, call_next):
     response: Response = await call_next(request)
     # Prevent MIME-type sniffing
     response.headers["X-Content-Type-Options"] = "nosniff"
-    # Deny framing (clickjacking protection)
-    response.headers["X-Frame-Options"] = "DENY"
     # Basic XSS protection header (legacy browsers)
     response.headers["X-XSS-Protection"] = "1; mode=block"
     # Strict referrer policy
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-    # Content Security Policy — restrict to same origin; allow inline styles
-    # for the dark-theme SPA (no external resources loaded)
+    # Content Security Policy — allow framing for Replit preview
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
-        "script-src 'self'; "
+        "script-src 'self' 'unsafe-inline'; "
         "style-src 'self' 'unsafe-inline'; "
         "img-src 'self' data:; "
         "font-src 'self'; "
-        "connect-src 'self'; "
-        "frame-ancestors 'none';"
+        "connect-src *; "
+        "frame-ancestors *;"
     )
     # Permissions policy — disable unnecessary browser features
     response.headers["Permissions-Policy"] = (
