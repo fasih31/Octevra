@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-OS Nexus</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">🧠</span>
+        <span class="logo-text">AI-OS Nexus</span>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#chat"   class="nav-item active" data-section="chat">
+        <span class="nav-icon">💬</span><span class="nav-label">Chat</span>
+      </a>
+      <a href="#memory" class="nav-item" data-section="memory">
+        <span class="nav-icon">🔒</span><span class="nav-label">Memory</span>
+      </a>
+      <a href="#sensors" class="nav-item" data-section="sensors">
+        <span class="nav-icon">📡</span><span class="nav-label">Sensors</span>
+      </a>
+      <a href="#reports" class="nav-item" data-section="reports">
+        <span class="nav-icon">📋</span><span class="nav-label">Reports</span>
+      </a>
+      <a href="#admin"  class="nav-item" data-section="admin">
+        <span class="nav-icon">⚙️</span><span class="nav-label">Admin</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="status-dot" id="statusDot"></div>
+      <span class="status-text" id="statusText">Connecting...</span>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content" id="mainContent">
+
+    <!-- ── CHAT SECTION ── -->
+    <section class="section" id="section-chat">
+      <div class="section-header">
+        <h1>💬 AI Chat</h1>
+        <p class="section-desc">Ask anything — knowledge base + IoT integration</p>
+      </div>
+
+      <!-- Mode & Consent Bar -->
+      <div class="chat-controls">
+        <div class="control-group">
+          <label>Mode</label>
+          <div class="toggle-group" id="modeToggle">
+            <button class="toggle-btn active" data-value="public">🌐 Public</button>
+            <button class="toggle-btn"        data-value="private">🔒 Private</button>
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Memory Consent</label>
+          <select id="memoryConsent" class="select-input">
+            <option value="NONE">None — not stored</option>
+            <option value="PRIVATE">Private — encrypted</option>
+            <option value="ANON_LEARN">Anon Learn</option>
+            <option value="PUBLIC">Public KB</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>User ID</label>
+          <input type="text" id="userId" class="text-input" placeholder="user-001" value="user-001" />
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="chat-messages" id="chatMessages">
+        <div class="welcome-msg">
+          <div class="welcome-icon">🧠</div>
+          <h2>Welcome to AI-OS Nexus</h2>
+          <p>Ask me anything about science, programming, irrigation, medical monitoring, industrial automation, or general knowledge.</p>
+        </div>
+      </div>
+
+      <!-- Input Bar -->
+      <div class="chat-input-bar">
+        <textarea
+          id="chatInput"
+          class="chat-textarea"
+          placeholder="Ask anything…"
+          rows="1"
+        ></textarea>
+        <button id="sendBtn" class="send-btn">
+          <span id="sendIcon">➤</span>
+        </button>
+      </div>
+      <div class="chat-meta" id="chatMeta"></div>
+    </section>
+
+    <!-- ── MEMORY SECTION ── -->
+    <section class="section hidden" id="section-memory">
+      <div class="section-header">
+        <h1>🔒 Memory Vault</h1>
+        <p class="section-desc">View, search, and manage your private memories</p>
+      </div>
+
+      <div class="memory-controls">
+        <input type="text" id="memUserId" class="text-input" placeholder="User ID" value="user-001" />
+        <button class="btn-primary" onclick="App.memory.load()">🔍 Load Memories</button>
+        <button class="btn-danger"  onclick="App.memory.deleteAll()">🗑️ Delete All</button>
+        <button class="btn-secondary" onclick="App.memory.exportData()">📤 Export</button>
+      </div>
+
+      <div class="memory-stats" id="memoryStats"></div>
+      <div class="memory-list" id="memoryList">
+        <div class="empty-state">Enter a User ID and click "Load Memories"</div>
+      </div>
+    </section>
+
+    <!-- ── SENSORS SECTION ── -->
+    <section class="section hidden" id="section-sensors">
+      <div class="section-header">
+        <h1>📡 Sensor Dashboard</h1>
+        <p class="section-desc">Real-time IoT sensor monitoring</p>
+      </div>
+
+      <div class="sensor-controls">
+        <button class="btn-primary" onclick="App.sensors.injectDemo('irrigation')">🌱 Inject Irrigation</button>
+        <button class="btn-primary" onclick="App.sensors.injectDemo('hospital')">🏥 Inject Hospital</button>
+        <button class="btn-primary" onclick="App.sensors.injectDemo('industrial')">🏭 Inject Industrial</button>
+        <button class="btn-secondary" onclick="App.sensors.refresh()">🔄 Refresh</button>
+        <label class="auto-refresh-label">
+          <input type="checkbox" id="autoRefresh" onchange="App.sensors.toggleAutoRefresh(this.checked)" />
+          Auto-refresh (5s)
+        </label>
+      </div>
+
+      <div class="sensor-grid" id="sensorGrid">
+        <div class="empty-state">Inject sensor data or connect real sensors to see readings here.</div>
+      </div>
+    </section>
+
+    <!-- ── REPORTS SECTION ── -->
+    <section class="section hidden" id="section-reports">
+      <div class="section-header">
+        <h1>📋 Reports</h1>
+        <p class="section-desc">AI-powered analysis and documentation</p>
+      </div>
+
+      <div class="report-form card">
+        <h3>Generate New Report</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Topic</label>
+            <input type="text" id="reportTopic" class="text-input" placeholder="e.g. Irrigation optimisation for wheat" />
+          </div>
+          <div class="form-group">
+            <label>Report Type</label>
+            <select id="reportType" class="select-input">
+              <option value="general">General Analysis</option>
+              <option value="irrigation">Irrigation Report</option>
+              <option value="hospital">Hospital/Medical</option>
+              <option value="industrial">Industrial Safety</option>
+              <option value="technical">Technical Report</option>
+              <option value="brd">Business Requirements</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="App.reports.generate()">🚀 Generate Report</button>
+      </div>
+
+      <div id="reportResult" class="report-result"></div>
+      <div class="report-history" id="reportHistory"></div>
+    </section>
+
+    <!-- ── ADMIN SECTION ── -->
+    <section class="section hidden" id="section-admin">
+      <div class="section-header">
+        <h1>⚙️ Admin Panel</h1>
+        <p class="section-desc">System health, stats, and safety management</p>
+      </div>
+
+      <div class="admin-grid">
+        <!-- Health Card -->
+        <div class="card" id="healthCard">
+          <h3>🟢 System Health</h3>
+          <div id="healthContent" class="skeleton-loader">Loading...</div>
+          <button class="btn-secondary mt-8" onclick="App.admin.loadHealth()">Refresh</button>
+        </div>
+
+        <!-- Stats Card -->
+        <div class="card" id="statsCard">
+          <h3>📊 System Stats</h3>
+          <div id="statsContent" class="skeleton-loader">Loading...</div>
+          <button class="btn-secondary mt-8" onclick="App.admin.loadStats()">Refresh</button>
+        </div>
+
+        <!-- Dataset Card -->
+        <div class="card" id="datasetCard">
+          <h3>📦 Dataset Stats</h3>
+          <div id="datasetContent" class="skeleton-loader">Loading...</div>
+        </div>
+
+        <!-- Safety Override Card -->
+        <div class="card">
+          <h3>🛡️ Safety Override</h3>
+          <div class="form-group">
+            <label>Action ID</label>
+            <input type="text" id="overrideActionId" class="text-input" placeholder="action-uuid" />
+          </div>
+          <div class="form-group">
+            <label>Admin ID</label>
+            <input type="text" id="overrideAdminId" class="text-input" placeholder="admin-001" value="admin-001" />
+          </div>
+          <div class="form-group">
+            <label>Reason</label>
+            <input type="text" id="overrideReason" class="text-input" placeholder="Authorised override for..." />
+          </div>
+          <button class="btn-warning" onclick="App.admin.safetyOverride()">⚡ Apply Override</button>
+        </div>
+
+        <!-- Maintenance -->
+        <div class="card">
+          <h3>🧹 Maintenance</h3>
+          <button class="btn-danger" onclick="App.admin.purgeExpiredMemory()">🗑️ Purge Expired Memories</button>
+          <div id="maintenanceMsg" class="mt-8"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast notifications -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
