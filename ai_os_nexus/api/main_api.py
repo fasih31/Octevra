@@ -1,5 +1,5 @@
 """
-Main FastAPI application for Octevra AI-OS Nexus.
+Main FastAPI application for Orkavia AI-OS Nexus.
 Serves the REST API and static frontend.
 Start with: uvicorn ai_os_nexus.api.main_api:app --reload
 
@@ -76,9 +76,9 @@ async def lifespan(app: FastAPI):
 # ---------------------------------------------------------------------------
 
 app = FastAPI(
-    title="Octevra AI-OS Nexus",
+    title="Orkavia AI-OS Nexus",
     description=(
-        "Octevra AI-OS Nexus — a dual-mode AI operating system: public knowledge "
+        "Orkavia AI-OS Nexus — a dual-mode AI operating system: public knowledge "
         "assistant + private AI OS with IoT integration, consent-based memory, and "
         "hybrid search. © 2026 Fasih ur Rehman. All Rights Reserved."
     ),

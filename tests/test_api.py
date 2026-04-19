@@ -1,4 +1,4 @@
-"""Tests for the Octevra AI-OS Nexus REST API endpoints."""
+"""Tests for the Orkavia AI-OS Nexus REST API endpoints."""
 
 from __future__ import annotations
 
@@ -385,9 +385,9 @@ def test_audit_sensitive_fields_masked():
 # ---------------------------------------------------------------------------
 
 def test_health_branding():
-    """Health endpoint should include Octevra product name and copyright."""
+    """Health endpoint should include Orkavia product name and copyright."""
     resp = client.get("/admin/health")
     assert resp.status_code == 200
     data = resp.json()
-    assert "Octevra" in data.get("product", "")
+    assert "Orkavia" in data.get("product", "")
     assert "Fasih ur Rehman" in data.get("copyright", "")

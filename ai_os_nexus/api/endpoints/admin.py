@@ -46,7 +46,7 @@ async def health():
     uptime = time.time() - _start_time
     return {
         "status": "healthy",
-        "product": "Octevra AI-OS Nexus",
+        "product": "Orkavia AI-OS Nexus",
         "version": "2.0.0",
         "copyright": "© 2026 Fasih ur Rehman. All Rights Reserved.",
         "uptime_seconds": round(uptime, 2),
@@ -185,7 +185,7 @@ async def audit_compliance():
     """
     stats = _audit.compliance_stats()
     return {
-        "product": "Octevra AI-OS Nexus",
+        "product": "Orkavia AI-OS Nexus",
         "copyright": "© 2026 Fasih ur Rehman. All Rights Reserved.",
         "generated_at": time.time(),
         **stats,
