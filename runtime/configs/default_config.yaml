@@ -1,0 +1,77 @@
+# ============================================================
+# AI-OS Nexus — Default Configuration
+# ============================================================
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  reload: false
+  workers: 1
+  log_level: "info"
+
+security:
+  master_secret: "nexus-default-secret-change-in-production"
+  # In production, set via NEXUS_MASTER_SECRET env variable
+  rate_limit_per_minute: 60
+  cors_origins:
+    - "*"
+
+llm:
+  default_model: "mock"
+  # Options: "mock", "openai", "gpt-3.5-turbo", "gpt-4"
+  openai_base_url: "https://api.openai.com/v1"
+  # Set OPENAI_API_KEY environment variable for OpenAI models
+  request_timeout: 30.0
+
+memory:
+  default_ttl_days: 30
+  max_entries_per_user: 10000
+  encryption_iterations: 100000
+
+search:
+  cache_ttl_seconds: 60
+  default_top_k: 10
+  semantic_weight: 0.5
+  keyword_weight: 0.3
+  memory_weight: 0.2
+
+database:
+  data_dir: "data"
+  memory_db: "data/memory.db"
+  consent_db: "data/consent.db"
+  sensors_db: "data/sensors.db"
+  dataset_db: "data/dataset.db"
+  tri_index_db: "data/tri_index.db"
+  safety_db: "data/safety.db"
+
+dataset:
+  seed_on_startup: true
+  max_seed_entries: 50
+  categories:
+    - knowledge
+    - conversation
+    - sensor_log
+    - decision_log
+    - user_feedback
+
+iot:
+  sensor_history_max_hours: 720  # 30 days
+  trigger_check_on_ingest: true
+  demo_sensors:
+    - id: "irr-001"
+      type: "irrigation"
+    - id: "hosp-001"
+      type: "hospital"
+    - id: "ind-001"
+      type: "industrial"
+
+safety:
+  confidence_review_threshold: 0.7
+  confidence_reject_threshold: 0.4
+  medical_always_requires_approval: true
+  log_all_checks: true
+
+frontend:
+  serve_static: true
+  static_dir: "ai_os_nexus/frontend"
+  title: "AI-OS Nexus"

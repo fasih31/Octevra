@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  nexus:
+    build: .
+    container_name: ai-os-nexus
+    ports:
+      - "8000:8000"
+    volumes:
+      - nexus_data:/app/data
+    environment:
+      - NEXUS_MASTER_SECRET=${NEXUS_MASTER_SECRET:-nexus-change-this-secret}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/admin/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  nexus_data:
+    driver: local
