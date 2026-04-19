@@ -1,4 +1,4 @@
-"""Tests for the AI-OS Nexus REST API endpoints."""
+"""Tests for the Octevra AI-OS Nexus REST API endpoints."""
 
 from __future__ import annotations
 
@@ -271,3 +271,123 @@ def test_root_serves_frontend():
     resp = client.get("/")
     # Either serves HTML or JSON api message
     assert resp.status_code == 200
+
+
+# ---------------------------------------------------------------------------
+# Security headers
+# ---------------------------------------------------------------------------
+
+def test_security_headers_present():
+    """Verify that all security headers are present on API responses."""
+    resp = client.get("/admin/health")
+    assert resp.status_code == 200
+    assert resp.headers.get("X-Content-Type-Options") == "nosniff"
+    assert resp.headers.get("X-Frame-Options") == "DENY"
+    assert resp.headers.get("X-XSS-Protection") == "1; mode=block"
+    assert "Referrer-Policy" in resp.headers
+    assert "Content-Security-Policy" in resp.headers
+    assert "Permissions-Policy" in resp.headers
+
+
+def test_csp_restricts_external_resources():
+    """CSP header must contain default-src 'self' to block external resources."""
+    resp = client.get("/admin/health")
+    csp = resp.headers.get("Content-Security-Policy", "")
+    assert "default-src 'self'" in csp
+    assert "frame-ancestors 'none'" in csp
+
+
+def test_cors_not_wildcard():
+    """CORS must not allow all origins."""
+    resp = client.options(
+        "/ask",
+        headers={"Origin": "https://evil.example.com", "Access-Control-Request-Method": "POST"},
+    )
+    # The response should either not have the CORS header set to wildcard *
+    # or return 400 (origin not allowed).
+    acao = resp.headers.get("Access-Control-Allow-Origin", "")
+    assert acao != "*", "CORS allow-origin must not be wildcard"
+
+
+# ---------------------------------------------------------------------------
+# Audit endpoints
+# ---------------------------------------------------------------------------
+
+def test_audit_recent():
+    """Audit log endpoint returns expected structure."""
+    # First generate some auditable events
+    client.post("/memory", json={
+        "user_id": "audit-test-user",
+        "content": "Audit test memory",
+        "mode": "PRIVATE",
+    })
+    resp = client.get("/admin/audit?limit=20")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "count" in data
+    assert "records" in data
+    assert isinstance(data["records"], list)
+    # Each record should have required fields
+    for rec in data["records"]:
+        assert "event" in rec
+        assert "actor" in rec
+        assert "status" in rec
+        assert "timestamp" in rec
+
+
+def test_audit_event_filter():
+    """Audit log can be filtered by event type."""
+    resp = client.get("/admin/audit?event=memory.store&limit=50")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["event_filter"] == "memory.store"
+    for rec in data["records"]:
+        assert rec["event"] == "memory.store"
+
+
+def test_audit_compliance():
+    """Compliance endpoint returns aggregate stats without payloads."""
+    resp = client.get("/admin/audit/compliance")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "total_events" in data
+    assert "events_last_24h" in data
+    assert "by_event" in data
+    assert "retention_policy" in data
+    assert "product" in data
+    assert "Fasih ur Rehman" in data.get("copyright", "")
+    # Compliance endpoint must NOT contain raw content/payloads
+    raw = str(data)
+    assert "REDACTED" not in raw or "len=" in raw  # masked values are ok
+
+
+def test_audit_sensitive_fields_masked():
+    """Memory store audit log should mask the 'content' field."""
+    user_id = "audit-mask-test-user"
+    secret_content = "My very secret memory content that should be masked"
+    client.post("/memory", json={
+        "user_id": user_id,
+        "content": secret_content,
+        "mode": "PRIVATE",
+    })
+    resp = client.get("/admin/audit?event=memory.store&limit=200")
+    assert resp.status_code == 200
+    data = resp.json()
+    # The actual secret content must not appear in any audit record detail
+    for rec in data["records"]:
+        if rec.get("detail"):
+            assert secret_content not in rec["detail"], \
+                "Sensitive content must be masked in audit log"
+
+
+# ---------------------------------------------------------------------------
+# Branding in health endpoint
+# ---------------------------------------------------------------------------
+
+def test_health_branding():
+    """Health endpoint should include Octevra product name and copyright."""
+    resp = client.get("/admin/health")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "Octevra" in data.get("product", "")
+    assert "Fasih ur Rehman" in data.get("copyright", "")

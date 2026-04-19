@@ -3,237 +3,374 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI-OS Nexus</title>
+  <meta name="description" content="Octevra AI-OS Nexus — dual-mode AI operating system with IoT integration, consent-based memory, and hybrid search." />
+  <meta name="author" content="Fasih ur Rehman" />
+  <meta name="copyright" content="© 2026 Fasih ur Rehman. All Rights Reserved." />
+  <title>Octevra AI-OS Nexus</title>
   <link rel="stylesheet" href="/static/css/styles.css" />
 </head>
 <body>
+
+  <!-- ===== SKIP LINK (accessibility) ===== -->
+  <a href="#mainContent" class="skip-link">Skip to main content</a>
+
   <!-- ===== SIDEBAR ===== -->
-  <aside class="sidebar" id="sidebar">
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
     <div class="sidebar-header">
-      <div class="logo">
-        <span class="logo-icon">🧠</span>
-        <span class="logo-text">AI-OS Nexus</span>
+      <div class="logo" aria-label="Octevra AI-OS Nexus">
+        <span class="logo-icon" aria-hidden="true">🧠</span>
+        <span class="logo-text">Octevra AI-OS Nexus</span>
       </div>
-      <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar" aria-expanded="true" aria-controls="sidebar">
+        <span aria-hidden="true">☰</span>
+      </button>
     </div>
 
-    <nav class="sidebar-nav">
-      <a href="#chat"   class="nav-item active" data-section="chat">
-        <span class="nav-icon">💬</span><span class="nav-label">Chat</span>
+    <nav class="sidebar-nav" aria-label="Section navigation">
+      <a href="#chat"    class="nav-item active" data-section="chat"    aria-current="page">
+        <span class="nav-icon" aria-hidden="true">💬</span><span class="nav-label">Chat</span>
       </a>
-      <a href="#memory" class="nav-item" data-section="memory">
-        <span class="nav-icon">🔒</span><span class="nav-label">Memory</span>
+      <a href="#memory"  class="nav-item" data-section="memory">
+        <span class="nav-icon" aria-hidden="true">🔒</span><span class="nav-label">Memory</span>
       </a>
       <a href="#sensors" class="nav-item" data-section="sensors">
-        <span class="nav-icon">📡</span><span class="nav-label">Sensors</span>
+        <span class="nav-icon" aria-hidden="true">📡</span><span class="nav-label">Sensors</span>
       </a>
       <a href="#reports" class="nav-item" data-section="reports">
-        <span class="nav-icon">📋</span><span class="nav-label">Reports</span>
+        <span class="nav-icon" aria-hidden="true">📋</span><span class="nav-label">Reports</span>
       </a>
-      <a href="#admin"  class="nav-item" data-section="admin">
-        <span class="nav-icon">⚙️</span><span class="nav-label">Admin</span>
+      <a href="#admin"   class="nav-item" data-section="admin">
+        <span class="nav-icon" aria-hidden="true">⚙️</span><span class="nav-label">Admin</span>
+      </a>
+      <a href="#audit"   class="nav-item" data-section="audit">
+        <span class="nav-icon" aria-hidden="true">🔍</span><span class="nav-label">Audit</span>
       </a>
     </nav>
 
     <div class="sidebar-footer">
-      <div class="status-dot" id="statusDot"></div>
-      <span class="status-text" id="statusText">Connecting...</span>
+      <div class="status-dot" id="statusDot" role="status" aria-live="polite" aria-label="Connection status"></div>
+      <span class="status-text" id="statusText">Connecting…</span>
     </div>
   </aside>
 
   <!-- ===== MAIN CONTENT ===== -->
-  <main class="main-content" id="mainContent">
+  <main class="main-content" id="mainContent" role="main">
+
+    <!-- ── HELP / ONBOARDING PANEL ── -->
+    <div id="helpPanel" class="help-panel hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <div class="help-panel-inner">
+        <button class="help-close" id="helpClose" aria-label="Close help">✕</button>
+        <h2 id="helpTitle">👋 Welcome to Octevra AI-OS Nexus</h2>
+        <p class="help-subtitle">A privacy-first AI operating system by <strong>Fasih ur Rehman</strong>.</p>
+        <div class="help-grid">
+          <div class="help-card">
+            <span class="help-icon" aria-hidden="true">💬</span>
+            <h3>Chat</h3>
+            <p>Ask questions in <strong>Public</strong> mode (no memory) or <strong>Private</strong> mode (encrypted memory per user).</p>
+          </div>
+          <div class="help-card">
+            <span class="help-icon" aria-hidden="true">🔒</span>
+            <h3>Memory Vault</h3>
+            <p>View, search, export, or delete your private encrypted memories. Full GDPR right-to-erasure support.</p>
+          </div>
+          <div class="help-card">
+            <span class="help-icon" aria-hidden="true">📡</span>
+            <h3>Sensors</h3>
+            <p>Monitor real-time IoT data: irrigation, hospital vitals, and industrial equipment.</p>
+          </div>
+          <div class="help-card">
+            <span class="help-icon" aria-hidden="true">📋</span>
+            <h3>Reports</h3>
+            <p>Generate AI-powered analysis reports for any domain: agriculture, medical, industrial, technical.</p>
+          </div>
+          <div class="help-card">
+            <span class="help-icon" aria-hidden="true">⚙️</span>
+            <h3>Admin</h3>
+            <p>System health, stats, safety overrides, and maintenance operations.</p>
+          </div>
+          <div class="help-card">
+            <span class="help-icon" aria-hidden="true">🔍</span>
+            <h3>Audit</h3>
+            <p>Compliance audit log and statistics for all critical actions — privacy-respecting, no sensitive payloads.</p>
+          </div>
+        </div>
+        <div class="help-footer">
+          <label class="help-dont-show">
+            <input type="checkbox" id="dontShowHelp" /> Don't show again
+          </label>
+          <button class="btn-primary" id="helpDismiss">Get Started →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── HEADER BAR ── -->
+    <header class="top-bar" role="banner">
+      <div class="top-bar-left">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu" aria-controls="sidebar" aria-expanded="false">
+          <span aria-hidden="true">☰</span>
+        </button>
+        <span class="top-bar-title" id="topBarTitle">Chat</span>
+      </div>
+      <div class="top-bar-right">
+        <button class="btn-icon" id="helpBtn" aria-label="Open help and onboarding" title="Help">
+          <span aria-hidden="true">❓</span>
+        </button>
+      </div>
+    </header>
 
     <!-- ── CHAT SECTION ── -->
-    <section class="section" id="section-chat">
+    <section class="section" id="section-chat" aria-labelledby="chat-heading">
       <div class="section-header">
-        <h1>💬 AI Chat</h1>
+        <h1 id="chat-heading">💬 AI Chat</h1>
         <p class="section-desc">Ask anything — knowledge base + IoT integration</p>
       </div>
 
       <!-- Mode & Consent Bar -->
-      <div class="chat-controls">
+      <div class="chat-controls" role="group" aria-label="Chat mode and consent settings">
         <div class="control-group">
-          <label>Mode</label>
-          <div class="toggle-group" id="modeToggle">
-            <button class="toggle-btn active" data-value="public">🌐 Public</button>
-            <button class="toggle-btn"        data-value="private">🔒 Private</button>
+          <label id="mode-label">Mode</label>
+          <div class="toggle-group" id="modeToggle" role="radiogroup" aria-labelledby="mode-label">
+            <button class="toggle-btn active" data-value="public" role="radio" aria-checked="true">🌐 Public</button>
+            <button class="toggle-btn"        data-value="private" role="radio" aria-checked="false">🔒 Private</button>
           </div>
         </div>
         <div class="control-group">
-          <label>Memory Consent</label>
-          <select id="memoryConsent" class="select-input">
+          <label for="memoryConsent">Memory Consent</label>
+          <select id="memoryConsent" class="select-input" aria-describedby="consent-desc">
             <option value="NONE">None — not stored</option>
             <option value="PRIVATE">Private — encrypted</option>
             <option value="ANON_LEARN">Anon Learn</option>
             <option value="PUBLIC">Public KB</option>
           </select>
+          <span id="consent-desc" class="sr-only">Controls how your conversation is stored</span>
         </div>
         <div class="control-group">
-          <label>User ID</label>
-          <input type="text" id="userId" class="text-input" placeholder="user-001" value="user-001" />
+          <label for="userId">User ID</label>
+          <input type="text" id="userId" class="text-input" placeholder="user-001" value="user-001"
+                 aria-describedby="userid-desc" autocomplete="username" />
+          <span id="userid-desc" class="sr-only">Your user identifier for private memory storage</span>
         </div>
       </div>
 
       <!-- Messages -->
-      <div class="chat-messages" id="chatMessages">
+      <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Chat messages">
         <div class="welcome-msg">
-          <div class="welcome-icon">🧠</div>
-          <h2>Welcome to AI-OS Nexus</h2>
+          <div class="welcome-icon" aria-hidden="true">🧠</div>
+          <h2>Welcome to Octevra AI-OS Nexus</h2>
           <p>Ask me anything about science, programming, irrigation, medical monitoring, industrial automation, or general knowledge.</p>
+          <button class="btn-secondary mt-8" id="welcomeHelpBtn">Learn how to use this app →</button>
         </div>
       </div>
 
       <!-- Input Bar -->
-      <div class="chat-input-bar">
+      <div class="chat-input-bar" role="group" aria-label="Message input">
+        <label for="chatInput" class="sr-only">Type your message</label>
         <textarea
           id="chatInput"
           class="chat-textarea"
-          placeholder="Ask anything…"
+          placeholder="Ask anything… (Enter to send, Shift+Enter for newline)"
           rows="1"
+          aria-label="Chat message input"
+          autocomplete="off"
+          spellcheck="true"
         ></textarea>
-        <button id="sendBtn" class="send-btn">
-          <span id="sendIcon">➤</span>
+        <button id="sendBtn" class="send-btn" aria-label="Send message" title="Send (Enter)">
+          <span id="sendIcon" aria-hidden="true">➤</span>
         </button>
       </div>
-      <div class="chat-meta" id="chatMeta"></div>
+      <div class="chat-meta" id="chatMeta" aria-live="polite" role="status"></div>
     </section>
 
     <!-- ── MEMORY SECTION ── -->
-    <section class="section hidden" id="section-memory">
+    <section class="section hidden" id="section-memory" aria-labelledby="memory-heading">
       <div class="section-header">
-        <h1>🔒 Memory Vault</h1>
-        <p class="section-desc">View, search, and manage your private memories</p>
+        <h1 id="memory-heading">🔒 Memory Vault</h1>
+        <p class="section-desc">View, search, and manage your private encrypted memories</p>
       </div>
 
-      <div class="memory-controls">
-        <input type="text" id="memUserId" class="text-input" placeholder="User ID" value="user-001" />
-        <button class="btn-primary" onclick="App.memory.load()">🔍 Load Memories</button>
-        <button class="btn-danger"  onclick="App.memory.deleteAll()">🗑️ Delete All</button>
-        <button class="btn-secondary" onclick="App.memory.exportData()">📤 Export</button>
+      <div class="memory-controls" role="group" aria-label="Memory management controls">
+        <label for="memUserId" class="sr-only">User ID for memory lookup</label>
+        <input type="text" id="memUserId" class="text-input" placeholder="User ID" value="user-001"
+               aria-label="User ID for memory lookup" autocomplete="username" />
+        <button class="btn-primary" onclick="App.memory.load()" aria-label="Load memories for this user">🔍 Load Memories</button>
+        <button class="btn-danger"  onclick="App.memory.deleteAll()" aria-label="Delete all memories for this user">🗑️ Delete All</button>
+        <button class="btn-secondary" onclick="App.memory.exportData()" aria-label="Export memories as JSON">📤 Export</button>
       </div>
 
-      <div class="memory-stats" id="memoryStats"></div>
-      <div class="memory-list" id="memoryList">
-        <div class="empty-state">Enter a User ID and click "Load Memories"</div>
+      <div class="memory-stats" id="memoryStats" aria-live="polite" role="region" aria-label="Memory statistics"></div>
+      <div class="memory-list" id="memoryList" role="list" aria-live="polite" aria-label="Memory entries">
+        <div class="empty-state">
+          <span aria-hidden="true">📭</span>
+          <p>Enter a User ID and click "Load Memories" to view stored memories.</p>
+        </div>
       </div>
     </section>
 
     <!-- ── SENSORS SECTION ── -->
-    <section class="section hidden" id="section-sensors">
+    <section class="section hidden" id="section-sensors" aria-labelledby="sensors-heading">
       <div class="section-header">
-        <h1>📡 Sensor Dashboard</h1>
+        <h1 id="sensors-heading">📡 Sensor Dashboard</h1>
         <p class="section-desc">Real-time IoT sensor monitoring</p>
       </div>
 
-      <div class="sensor-controls">
-        <button class="btn-primary" onclick="App.sensors.injectDemo('irrigation')">🌱 Inject Irrigation</button>
-        <button class="btn-primary" onclick="App.sensors.injectDemo('hospital')">🏥 Inject Hospital</button>
-        <button class="btn-primary" onclick="App.sensors.injectDemo('industrial')">🏭 Inject Industrial</button>
-        <button class="btn-secondary" onclick="App.sensors.refresh()">🔄 Refresh</button>
-        <label class="auto-refresh-label">
+      <div class="sensor-controls" role="group" aria-label="Sensor controls">
+        <button class="btn-primary" onclick="App.sensors.injectDemo('irrigation')" aria-label="Inject demo irrigation sensor data">🌱 Inject Irrigation</button>
+        <button class="btn-primary" onclick="App.sensors.injectDemo('hospital')"   aria-label="Inject demo hospital sensor data">🏥 Inject Hospital</button>
+        <button class="btn-primary" onclick="App.sensors.injectDemo('industrial')" aria-label="Inject demo industrial sensor data">🏭 Inject Industrial</button>
+        <button class="btn-secondary" onclick="App.sensors.refresh()" aria-label="Refresh sensor readings">🔄 Refresh</button>
+        <label class="auto-refresh-label" for="autoRefresh">
           <input type="checkbox" id="autoRefresh" onchange="App.sensors.toggleAutoRefresh(this.checked)" />
           Auto-refresh (5s)
         </label>
       </div>
 
-      <div class="sensor-grid" id="sensorGrid">
-        <div class="empty-state">Inject sensor data or connect real sensors to see readings here.</div>
+      <div class="sensor-grid" id="sensorGrid" role="list" aria-live="polite" aria-label="Sensor readings">
+        <div class="empty-state">
+          <span aria-hidden="true">📡</span>
+          <p>Inject sensor data or connect real sensors to see readings here.</p>
+        </div>
       </div>
     </section>
 
     <!-- ── REPORTS SECTION ── -->
-    <section class="section hidden" id="section-reports">
+    <section class="section hidden" id="section-reports" aria-labelledby="reports-heading">
       <div class="section-header">
-        <h1>📋 Reports</h1>
+        <h1 id="reports-heading">📋 Reports</h1>
         <p class="section-desc">AI-powered analysis and documentation</p>
       </div>
 
-      <div class="report-form card">
-        <h3>Generate New Report</h3>
+      <div class="report-form card" role="form" aria-label="Generate report form">
+        <h2 class="card-title">Generate New Report</h2>
         <div class="form-row">
           <div class="form-group">
-            <label>Topic</label>
-            <input type="text" id="reportTopic" class="text-input" placeholder="e.g. Irrigation optimisation for wheat" />
+            <label for="reportTopic">Topic</label>
+            <input type="text" id="reportTopic" class="text-input" placeholder="e.g. Irrigation optimisation for wheat"
+                   aria-required="true" />
           </div>
           <div class="form-group">
-            <label>Report Type</label>
-            <select id="reportType" class="select-input">
+            <label for="reportType">Report Type</label>
+            <select id="reportType" class="select-input" aria-required="true">
               <option value="general">General Analysis</option>
               <option value="irrigation">Irrigation Report</option>
-              <option value="hospital">Hospital/Medical</option>
+              <option value="hospital">Hospital / Medical</option>
               <option value="industrial">Industrial Safety</option>
               <option value="technical">Technical Report</option>
               <option value="brd">Business Requirements</option>
             </select>
           </div>
         </div>
-        <button class="btn-primary" onclick="App.reports.generate()">🚀 Generate Report</button>
+        <button class="btn-primary" onclick="App.reports.generate()" aria-label="Generate report">🚀 Generate Report</button>
       </div>
 
-      <div id="reportResult" class="report-result"></div>
-      <div class="report-history" id="reportHistory"></div>
+      <div id="reportResult" class="report-result" role="region" aria-live="polite" aria-label="Generated report"></div>
+      <div class="report-history" id="reportHistory" role="list" aria-label="Report history"></div>
     </section>
 
     <!-- ── ADMIN SECTION ── -->
-    <section class="section hidden" id="section-admin">
+    <section class="section hidden" id="section-admin" aria-labelledby="admin-heading">
       <div class="section-header">
-        <h1>⚙️ Admin Panel</h1>
+        <h1 id="admin-heading">⚙️ Admin Panel</h1>
         <p class="section-desc">System health, stats, and safety management</p>
       </div>
 
       <div class="admin-grid">
         <!-- Health Card -->
-        <div class="card" id="healthCard">
-          <h3>🟢 System Health</h3>
-          <div id="healthContent" class="skeleton-loader">Loading...</div>
-          <button class="btn-secondary mt-8" onclick="App.admin.loadHealth()">Refresh</button>
+        <div class="card" role="region" aria-labelledby="health-card-title">
+          <h2 class="card-title" id="health-card-title">🟢 System Health</h2>
+          <div id="healthContent" class="skeleton-loader" aria-live="polite">Loading…</div>
+          <button class="btn-secondary mt-8" onclick="App.admin.loadHealth()" aria-label="Refresh health status">Refresh</button>
         </div>
 
         <!-- Stats Card -->
-        <div class="card" id="statsCard">
-          <h3>📊 System Stats</h3>
-          <div id="statsContent" class="skeleton-loader">Loading...</div>
-          <button class="btn-secondary mt-8" onclick="App.admin.loadStats()">Refresh</button>
+        <div class="card" role="region" aria-labelledby="stats-card-title">
+          <h2 class="card-title" id="stats-card-title">📊 System Stats</h2>
+          <div id="statsContent" class="skeleton-loader" aria-live="polite">Loading…</div>
+          <button class="btn-secondary mt-8" onclick="App.admin.loadStats()" aria-label="Refresh system stats">Refresh</button>
         </div>
 
         <!-- Dataset Card -->
-        <div class="card" id="datasetCard">
-          <h3>📦 Dataset Stats</h3>
-          <div id="datasetContent" class="skeleton-loader">Loading...</div>
+        <div class="card" role="region" aria-labelledby="dataset-card-title">
+          <h2 class="card-title" id="dataset-card-title">📦 Dataset Stats</h2>
+          <div id="datasetContent" class="skeleton-loader" aria-live="polite">Loading…</div>
         </div>
 
         <!-- Safety Override Card -->
-        <div class="card">
-          <h3>🛡️ Safety Override</h3>
+        <div class="card" role="form" aria-labelledby="override-card-title">
+          <h2 class="card-title" id="override-card-title">🛡️ Safety Override</h2>
           <div class="form-group">
-            <label>Action ID</label>
-            <input type="text" id="overrideActionId" class="text-input" placeholder="action-uuid" />
+            <label for="overrideActionId">Action ID</label>
+            <input type="text" id="overrideActionId" class="text-input" placeholder="action-uuid" aria-required="true" />
           </div>
           <div class="form-group">
-            <label>Admin ID</label>
-            <input type="text" id="overrideAdminId" class="text-input" placeholder="admin-001" value="admin-001" />
+            <label for="overrideAdminId">Admin ID</label>
+            <input type="text" id="overrideAdminId" class="text-input" placeholder="admin-001" value="admin-001" aria-required="true" />
           </div>
           <div class="form-group">
-            <label>Reason</label>
-            <input type="text" id="overrideReason" class="text-input" placeholder="Authorised override for..." />
+            <label for="overrideReason">Reason</label>
+            <input type="text" id="overrideReason" class="text-input" placeholder="Authorised override for…" aria-required="true" />
           </div>
-          <button class="btn-warning" onclick="App.admin.safetyOverride()">⚡ Apply Override</button>
+          <button class="btn-warning" onclick="App.admin.safetyOverride()" aria-label="Apply safety override">⚡ Apply Override</button>
         </div>
 
         <!-- Maintenance -->
-        <div class="card">
-          <h3>🧹 Maintenance</h3>
-          <button class="btn-danger" onclick="App.admin.purgeExpiredMemory()">🗑️ Purge Expired Memories</button>
-          <div id="maintenanceMsg" class="mt-8"></div>
+        <div class="card" role="region" aria-labelledby="maintenance-card-title">
+          <h2 class="card-title" id="maintenance-card-title">🧹 Maintenance</h2>
+          <button class="btn-danger" onclick="App.admin.purgeExpiredMemory()" aria-label="Purge expired memory entries">🗑️ Purge Expired Memories</button>
+          <div id="maintenanceMsg" class="mt-8" aria-live="polite" role="status"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── AUDIT SECTION ── -->
+    <section class="section hidden" id="section-audit" aria-labelledby="audit-heading">
+      <div class="section-header">
+        <h1 id="audit-heading">🔍 Audit &amp; Compliance</h1>
+        <p class="section-desc">Privacy-respecting audit trail — no sensitive payloads exposed</p>
+      </div>
+
+      <div class="audit-controls" role="group" aria-label="Audit log controls">
+        <div class="control-group">
+          <label for="auditEventFilter">Event Filter</label>
+          <select id="auditEventFilter" class="select-input" aria-label="Filter audit events">
+            <option value="">All events</option>
+            <option value="memory.store">memory.store</option>
+            <option value="memory.delete">memory.delete</option>
+            <option value="memory.delete_all">memory.delete_all</option>
+            <option value="memory.export">memory.export</option>
+            <option value="safety.override">safety.override</option>
+            <option value="safety.blocked">safety.blocked</option>
+            <option value="admin.purge_expired">admin.purge_expired</option>
+            <option value="admin.export_dataset">admin.export_dataset</option>
+            <option value="api.ask">api.ask</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="App.audit.load()" aria-label="Load audit log">🔍 Load Audit Log</button>
+        <button class="btn-secondary" onclick="App.audit.loadCompliance()" aria-label="Load compliance summary">📊 Compliance Summary</button>
+      </div>
+
+      <div id="complianceStats" class="compliance-stats" role="region" aria-live="polite" aria-label="Compliance statistics"></div>
+      <div id="auditList" class="audit-list" role="log" aria-live="polite" aria-label="Audit log entries">
+        <div class="empty-state">
+          <span aria-hidden="true">🔍</span>
+          <p>Click "Load Audit Log" to view recent audit events.</p>
         </div>
       </div>
     </section>
 
   </main>
 
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" role="contentinfo">
+    <p>
+      <span aria-hidden="true">🧠</span>
+      <strong>Octevra AI-OS Nexus</strong>
+      &nbsp;·&nbsp;
+      <span>© 2026 <strong>Fasih ur Rehman</strong>. All Rights Reserved.</span>
+    </p>
+  </footer>
+
   <!-- Toast notifications -->
-  <div id="toastContainer" class="toast-container"></div>
+  <div id="toastContainer" class="toast-container" role="status" aria-live="assertive" aria-atomic="false"></div>
 
   <script src="/static/js/app.js"></script>
 </body>

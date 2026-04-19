@@ -1,7 +1,22 @@
 /**
- * AI-OS Nexus — Single Page Application
- * Hash-based SPA router, API client, chat, sensors, memory, admin
+ * Octevra AI-OS Nexus — Single Page Application
+ * © 2026 Fasih ur Rehman. All Rights Reserved.
+ *
+ * Hash-based SPA router, API client, chat, sensors, memory, admin, audit
  */
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+    .replace(/\n/g, '<br>');
+}
 
 // ============================================================
 // API BASE URL
@@ -40,8 +55,10 @@ function toast(msg, type = 'info', duration = 4000) {
   const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
   const el = document.createElement('div');
   el.className = `toast ${type}`;
+  el.setAttribute('role', 'alert');
   const iconSpan = document.createElement('span');
   iconSpan.textContent = icons[type] || '';
+  iconSpan.setAttribute('aria-hidden', 'true');
   const msgSpan = document.createElement('span');
   msgSpan.textContent = String(msg);
   el.appendChild(iconSpan);
@@ -53,7 +70,15 @@ function toast(msg, type = 'info', duration = 4000) {
 // ============================================================
 // ROUTER
 // ============================================================
-const sections = ['chat', 'memory', 'sensors', 'reports', 'admin'];
+const sections = ['chat', 'memory', 'sensors', 'reports', 'admin', 'audit'];
+const sectionTitles = {
+  chat: 'Chat',
+  memory: 'Memory Vault',
+  sensors: 'Sensors',
+  reports: 'Reports',
+  admin: 'Admin',
+  audit: 'Audit',
+};
 
 function showSection(name) {
   sections.forEach(s => {
@@ -61,8 +86,14 @@ function showSection(name) {
     if (el) el.classList.toggle('hidden', s !== name);
   });
   document.querySelectorAll('.nav-item').forEach(a => {
-    a.classList.toggle('active', a.dataset.section === name);
+    const isActive = a.dataset.section === name;
+    a.classList.toggle('active', isActive);
+    a.setAttribute('aria-current', isActive ? 'page' : 'false');
   });
+  // Update top bar title
+  const titleEl = document.getElementById('topBarTitle');
+  if (titleEl) titleEl.textContent = sectionTitles[name] || '';
+
   if (name === 'admin') { App.admin.loadHealth(); App.admin.loadStats(); App.admin.loadDataset(); }
   if (name === 'sensors') { App.sensors.refresh(); }
 }
@@ -79,8 +110,100 @@ document.querySelectorAll('.nav-item').forEach(a => {
     const sec = a.dataset.section;
     window.location.hash = sec;
     showSection(sec);
+    closeMobileMenu();
   });
 });
+
+// ============================================================
+// MOBILE MENU
+// ============================================================
+function closeMobileMenu() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const btn = document.getElementById('mobileMenuBtn');
+  sidebar.classList.remove('open');
+  if (overlay) overlay.classList.remove('active');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+}
+
+function openMobileMenu() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const btn = document.getElementById('mobileMenuBtn');
+  sidebar.classList.add('open');
+  if (overlay) overlay.classList.add('active');
+  if (btn) btn.setAttribute('aria-expanded', 'true');
+}
+
+// Create overlay element
+(function () {
+  const overlay = document.createElement('div');
+  overlay.id = 'sidebarOverlay';
+  overlay.className = 'sidebar-overlay';
+  overlay.addEventListener('click', closeMobileMenu);
+  document.body.appendChild(overlay);
+})();
+
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+if (mobileMenuBtn) {
+  mobileMenuBtn.addEventListener('click', () => {
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar.classList.contains('open')) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  });
+}
+
+// Sidebar toggle (desktop)
+const sidebarToggle = document.getElementById('sidebarToggle');
+if (sidebarToggle) {
+  sidebarToggle.addEventListener('click', () => {
+    // On desktop this is handled by CSS transitions; just close mobile if open
+    closeMobileMenu();
+  });
+}
+
+// ============================================================
+// HELP / ONBOARDING PANEL
+// ============================================================
+(function () {
+  const panel = document.getElementById('helpPanel');
+  const closeBtn = document.getElementById('helpClose');
+  const dismissBtn = document.getElementById('helpDismiss');
+  const helpBtn = document.getElementById('helpBtn');
+  const welcomeHelpBtn = document.getElementById('welcomeHelpBtn');
+  const dontShow = document.getElementById('dontShowHelp');
+
+  function openHelp() {
+    if (panel) panel.classList.remove('hidden');
+  }
+
+  function closeHelp() {
+    if (panel) panel.classList.add('hidden');
+    if (dontShow && dontShow.checked) {
+      try { localStorage.setItem('nexus_help_seen', '1'); } catch (_) { /* ignore */ }
+    }
+  }
+
+  if (closeBtn)    closeBtn.addEventListener('click', closeHelp);
+  if (dismissBtn)  dismissBtn.addEventListener('click', closeHelp);
+  if (helpBtn)     helpBtn.addEventListener('click', openHelp);
+  if (welcomeHelpBtn) welcomeHelpBtn.addEventListener('click', openHelp);
+
+  // Close on ESC
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && panel && !panel.classList.contains('hidden')) {
+      closeHelp();
+    }
+  });
+
+  // Show automatically for first-time users
+  let seen = false;
+  try { seen = !!localStorage.getItem('nexus_help_seen'); } catch (_) { /* ignore */ }
+  if (!seen && panel) panel.classList.remove('hidden');
+})();
 
 // ============================================================
 // CHAT MODULE
@@ -96,8 +219,12 @@ const Chat = (() => {
   // Mode toggle
   document.querySelectorAll('.toggle-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.toggle-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-checked', 'false');
+      });
       btn.classList.add('active');
+      btn.setAttribute('aria-checked', 'true');
       mode = btn.dataset.value;
     });
   });
@@ -117,9 +244,39 @@ const Chat = (() => {
 
   function showTyping() {
     return appendBubble(
-      '<div class="typing-dots"><span></span><span></span><span></span></div>',
+      '<div class="typing-dots" aria-label="Thinking…"><span></span><span></span><span></span></div>',
       'bubble-typing'
     );
+  }
+
+  function addFeedbackButtons(bubbleEl) {
+    const fbDiv = document.createElement('div');
+    fbDiv.className = 'bubble-feedback';
+    fbDiv.setAttribute('aria-label', 'Rate this response');
+
+    const upBtn = document.createElement('button');
+    upBtn.className = 'feedback-btn';
+    upBtn.textContent = '👍';
+    upBtn.setAttribute('aria-label', 'Thumbs up — helpful response');
+    upBtn.addEventListener('click', function () {
+      upBtn.classList.add('voted');
+      downBtn.disabled = true;
+      upBtn.disabled = true;
+    });
+
+    const downBtn = document.createElement('button');
+    downBtn.className = 'feedback-btn';
+    downBtn.textContent = '👎';
+    downBtn.setAttribute('aria-label', 'Thumbs down — unhelpful response');
+    downBtn.addEventListener('click', function () {
+      downBtn.classList.add('voted');
+      upBtn.disabled = true;
+      downBtn.disabled = true;
+    });
+
+    fbDiv.appendChild(upBtn);
+    fbDiv.appendChild(downBtn);
+    bubbleEl.appendChild(fbDiv);
   }
 
   async function send() {
@@ -147,9 +304,10 @@ const Chat = (() => {
 
       typing.remove();
       const sourcesHtml = res.sources && res.sources.length
-        ? `<div class="bubble-sources">📚 Sources: ${res.sources.slice(0, 3).map(s => s.source).join(', ')}</div>`
+        ? `<div class="bubble-sources">📚 Sources: ${res.sources.slice(0, 3).map(s => escapeHtml(s.source)).join(', ')}</div>`
         : '';
-      appendBubble(escapeHtml(res.response) + sourcesHtml, 'bubble-ai');
+      const aiBubble = appendBubble(escapeHtml(res.response) + sourcesHtml, 'bubble-ai');
+      addFeedbackButtons(aiBubble);
 
       const memNote = res.memory_stored ? '💾 Memory stored' : '';
       document.getElementById('chatMeta').textContent =
@@ -157,11 +315,12 @@ const Chat = (() => {
 
     } catch (err) {
       typing.remove();
-      appendBubble(`Error: ${escapeHtml(err.message)}`, 'bubble-ai');
+      appendBubble(`⚠️ Error: ${escapeHtml(err.message)}`, 'bubble-ai');
       toast(err.message, 'error');
     } finally {
       sending = false;
       document.getElementById('sendBtn').disabled = false;
+      input.focus();
     }
   }
 
@@ -185,10 +344,13 @@ const Memory = (() => {
   async function load() {
     const userId = document.getElementById('memUserId').value.trim();
     if (!userId) { toast('Enter a User ID first', 'warning'); return; }
+    const list = document.getElementById('memoryList');
+    list.innerHTML = '<div class="skeleton-loader" style="padding:2rem;text-align:center">⏳ Loading memories…</div>';
     try {
       const data = await http.get(`/memory/${userId}`);
       renderMemories(data, userId);
     } catch (err) {
+      list.innerHTML = `<div class="empty-state"><span>❌</span><p>${escapeHtml(err.message)}</p></div>`;
       toast(err.message, 'error');
     }
   }
@@ -202,12 +364,12 @@ const Memory = (() => {
     stats.innerHTML = `
       <div class="stat-chip"><div class="stat-value">${entries.length}</div><div class="stat-label">Total</div></div>
       ${Object.entries(counts).map(([m, c]) =>
-        `<div class="stat-chip"><div class="stat-value">${c}</div><div class="stat-label">${m}</div></div>`
+        `<div class="stat-chip"><div class="stat-value">${c}</div><div class="stat-label">${escapeHtml(m)}</div></div>`
       ).join('')}
     `;
 
     if (!entries.length) {
-      list.innerHTML = '<div class="empty-state">No memories found for this user.</div>';
+      list.innerHTML = '<div class="empty-state"><span>📭</span><p>No memories found for this user.</p></div>';
       return;
     }
 
@@ -221,8 +383,8 @@ const Memory = (() => {
         ? `<span>Expires: ${escapeHtml(new Date(e.expires_at * 1000).toLocaleDateString())}</span>`
         : '';
       return `
-      <div class="memory-card">
-        <button class="mem-delete-btn" onclick="App.memory.deleteOne('${safeUserId}','${safeId}')">✕</button>
+      <div class="memory-card" role="listitem">
+        <button class="mem-delete-btn" onclick="App.memory.deleteOne('${safeUserId}','${safeId}')" aria-label="Delete this memory">✕</button>
         <div class="mem-content">${safeContent}</div>
         <div class="mem-meta">
           <span class="mode-badge mode-${safeMode}">${safeMode}</span>
@@ -347,7 +509,7 @@ const Sensors = (() => {
       const { sensors } = await http.get('/sensor/');
       if (!sensors.length) {
         document.getElementById('sensorGrid').innerHTML =
-          '<div class="empty-state">No sensor data yet. Click an inject button above.</div>';
+          '<div class="empty-state"><span>📡</span><p>No sensor data yet. Click an inject button above.</p></div>';
         return;
       }
       const readings = await Promise.all(
@@ -362,17 +524,17 @@ const Sensors = (() => {
   function renderSensors(readings) {
     const grid = document.getElementById('sensorGrid');
     if (!readings.length) {
-      grid.innerHTML = '<div class="empty-state">No sensor readings available.</div>';
+      grid.innerHTML = '<div class="empty-state"><span>📡</span><p>No sensor readings available.</p></div>';
       return;
     }
     grid.innerHTML = readings.map(r => {
       const status = getSensorStatus(r);
       const fields = Object.entries(r.data).slice(0, 8);
       return `
-        <div class="sensor-card status-${status}">
+        <div class="sensor-card status-${status}" role="listitem" aria-label="Sensor ${escapeHtml(r.sensor_id)} — status ${status}">
           <div class="sensor-card-header">
             <span class="sensor-id">📡 ${escapeHtml(r.sensor_id)}</span>
-            <span class="sensor-badge ${status}">${status.toUpperCase()}</span>
+            <span class="sensor-badge ${status}" aria-label="Status: ${status}">${status.toUpperCase()}</span>
           </div>
           <div class="sensor-readings">
             ${fields.map(([k, v]) => `
@@ -382,7 +544,7 @@ const Sensors = (() => {
               </div>
             `).join('')}
           </div>
-          <div class="sensor-timestamp">🕐 ${new Date(r.timestamp * 1000).toLocaleTimeString()}</div>
+          <div class="sensor-timestamp">🕐 ${escapeHtml(new Date(r.timestamp * 1000).toLocaleTimeString())}</div>
         </div>
       `;
     }).join('');
@@ -450,7 +612,7 @@ const Reports = (() => {
       renderHistory();
       toast('Report generated ✓', 'success');
     } catch (err) {
-      result.innerHTML = `<div style="color:var(--danger)">Error: ${escapeHtml(err.message)}</div>`;
+      result.innerHTML = `<div style="color:var(--danger)">⚠️ Error: ${escapeHtml(err.message)}</div>`;
       toast(err.message, 'error');
     }
   }
@@ -459,9 +621,9 @@ const Reports = (() => {
     const result = document.getElementById('reportResult');
     result.classList.add('visible');
     result.innerHTML = `
-      <h3>📋 ${escapeHtml(res.topic)} <small style="color:var(--text-muted);font-size:0.8rem">[${res.report_type}]</small></h3>
+      <h2 class="card-title">📋 ${escapeHtml(res.topic)} <small style="color:var(--text-muted);font-size:0.8rem">[${escapeHtml(res.report_type)}]</small></h2>
       <div style="margin:0.5rem 0 1rem;font-size:0.78rem;color:var(--text-muted)">
-        ID: ${res.report_id} | ⚡ ${res.latency_ms}ms
+        ID: ${escapeHtml(res.report_id)} | ⚡ ${res.latency_ms}ms
       </div>
       ${res.sections.map(s => `
         <div class="report-section">
@@ -475,11 +637,12 @@ const Reports = (() => {
   function renderHistory() {
     const el = document.getElementById('reportHistory');
     if (!history.length) return;
-    el.innerHTML = '<h3 style="margin-bottom:0.75rem">Recent Reports</h3>' +
+    el.innerHTML = '<h2 class="card-title" style="margin-bottom:0.75rem">Recent Reports</h2>' +
       history.slice(0, 10).map(r => `
-        <div class="report-item" onclick="App.reports.showReport('${r.report_id}')">
+        <div class="report-item" role="button" tabindex="0" onclick="App.reports.showReport('${escapeHtml(r.report_id)}')"
+             onkeydown="if(event.key==='Enter')App.reports.showReport('${escapeHtml(r.report_id)}')">
           <span>📋 ${escapeHtml(r.topic)}</span>
-          <span style="font-size:0.78rem;color:var(--text-muted)">${r.report_type}</span>
+          <span style="font-size:0.78rem;color:var(--text-muted)">${escapeHtml(r.report_type)}</span>
         </div>
       `).join('');
   }
@@ -500,16 +663,16 @@ const Admin = (() => {
     try {
       const d = await http.get('/admin/health');
       document.getElementById('healthContent').innerHTML = `
-        <div class="health-row"><span>Status</span><span class="health-val">${d.status}</span></div>
-        <div class="health-row"><span>Uptime</span><span class="health-val">${d.uptime_human}</span></div>
-        <div class="health-row"><span>Version</span><span class="health-val">${d.version}</span></div>
-        <div class="health-row"><span>Python</span><span class="health-val">${d.python_version}</span></div>
+        <div class="health-row"><span>Status</span><span class="health-val">${escapeHtml(d.status)}</span></div>
+        <div class="health-row"><span>Uptime</span><span class="health-val">${escapeHtml(d.uptime_human)}</span></div>
+        <div class="health-row"><span>Version</span><span class="health-val">${escapeHtml(d.version)}</span></div>
+        <div class="health-row"><span>Python</span><span class="health-val">${escapeHtml(d.python_version)}</span></div>
         ${Object.entries(d.components).map(([k, v]) =>
-          `<div class="health-row"><span>${k}</span><span class="health-val ${v !== 'ok' ? 'warn' : ''}">${v}</span></div>`
+          `<div class="health-row"><span>${escapeHtml(k)}</span><span class="health-val ${v !== 'ok' ? 'warn' : ''}">${escapeHtml(v)}</span></div>`
         ).join('')}
       `;
     } catch (err) {
-      document.getElementById('healthContent').innerHTML = `<span style="color:var(--danger)">Error: ${err.message}</span>`;
+      document.getElementById('healthContent').innerHTML = `<span style="color:var(--danger)">⚠️ ${escapeHtml(err.message)}</span>`;
     }
   }
 
@@ -524,7 +687,7 @@ const Admin = (() => {
         <div class="stat-row"><span>Safety Overrides</span><span class="stat-num">${d.safety_overrides}</span></div>
       `;
     } catch (err) {
-      document.getElementById('statsContent').innerHTML = `<span style="color:var(--danger)">${err.message}</span>`;
+      document.getElementById('statsContent').innerHTML = `<span style="color:var(--danger)">⚠️ ${escapeHtml(err.message)}</span>`;
     }
   }
 
@@ -535,11 +698,11 @@ const Admin = (() => {
       document.getElementById('datasetContent').innerHTML = `
         <div class="stat-row"><span>Total Entries</span><span class="stat-num">${d.total_entries}</span></div>
         ${cats.map(([c, n]) =>
-          `<div class="stat-row"><span>${c}</span><span class="stat-num">${n}</span></div>`
+          `<div class="stat-row"><span>${escapeHtml(c)}</span><span class="stat-num">${n}</span></div>`
         ).join('')}
       `;
     } catch (err) {
-      document.getElementById('datasetContent').innerHTML = `<span style="color:var(--danger)">${err.message}</span>`;
+      document.getElementById('datasetContent').innerHTML = `<span style="color:var(--danger)">⚠️ ${escapeHtml(err.message)}</span>`;
     }
   }
 
@@ -548,9 +711,10 @@ const Admin = (() => {
     const adminId  = document.getElementById('overrideAdminId').value.trim();
     const reason   = document.getElementById('overrideReason').value.trim();
     if (!actionId || !reason) { toast('Fill in Action ID and Reason', 'warning'); return; }
+    if (reason.length < 10) { toast('Reason must be at least 10 characters', 'warning'); return; }
     try {
       const res = await http.post('/admin/safety/override', { action_id: actionId, admin_id: adminId, reason });
-      toast(`Override applied for ${res.action_id}`, 'success');
+      toast(`Override applied for ${escapeHtml(res.action_id)}`, 'success');
     } catch (err) { toast(err.message, 'error'); }
   }
 
@@ -566,6 +730,85 @@ const Admin = (() => {
 })();
 
 // ============================================================
+// AUDIT MODULE
+// ============================================================
+const Audit = (() => {
+  async function load() {
+    const eventFilter = document.getElementById('auditEventFilter').value;
+    const listEl = document.getElementById('auditList');
+    listEl.innerHTML = '<div class="skeleton-loader" style="padding:2rem;text-align:center">⏳ Loading audit log…</div>';
+    try {
+      const path = eventFilter
+        ? `/admin/audit?limit=100&event=${encodeURIComponent(eventFilter)}`
+        : '/admin/audit?limit=100';
+      const data = await http.get(path);
+      renderAuditList(data.records);
+      toast(`Loaded ${data.count} audit records`, 'info');
+    } catch (err) {
+      listEl.innerHTML = `<div class="empty-state"><span>❌</span><p>${escapeHtml(err.message)}</p></div>`;
+      toast(err.message, 'error');
+    }
+  }
+
+  async function loadCompliance() {
+    const statsEl = document.getElementById('complianceStats');
+    statsEl.innerHTML = '<div class="skeleton-loader" style="padding:1rem;text-align:center">⏳ Loading compliance stats…</div>';
+    try {
+      const data = await http.get('/admin/audit/compliance');
+      renderComplianceStats(data);
+    } catch (err) {
+      statsEl.innerHTML = `<div class="empty-state"><span>❌</span><p>${escapeHtml(err.message)}</p></div>`;
+      toast(err.message, 'error');
+    }
+  }
+
+  function renderComplianceStats(data) {
+    const statsEl = document.getElementById('complianceStats');
+    statsEl.innerHTML = `
+      <div class="compliance-card">
+        <div class="comp-value">${data.total_events}</div>
+        <div class="comp-label">Total Events</div>
+      </div>
+      <div class="compliance-card">
+        <div class="comp-value">${data.events_last_24h}</div>
+        <div class="comp-label">Last 24h</div>
+      </div>
+      ${Object.entries(data.by_event || {}).slice(0, 4).map(([ev, cnt]) => `
+        <div class="compliance-card">
+          <div class="comp-value">${cnt}</div>
+          <div class="comp-label">${escapeHtml(ev)}</div>
+        </div>
+      `).join('')}
+    `;
+  }
+
+  function renderAuditList(records) {
+    const listEl = document.getElementById('auditList');
+    if (!records.length) {
+      listEl.innerHTML = '<div class="empty-state"><span>🔍</span><p>No audit records found.</p></div>';
+      return;
+    }
+    listEl.innerHTML = records.map(r => {
+      const ts = new Date(r.timestamp * 1000).toLocaleString();
+      const statusClass = `audit-status-${(r.status || 'ok').replace(/[^a-z]/g, '')}`;
+      return `
+        <div class="audit-row" role="listitem">
+          <div class="audit-row-header">
+            <span class="audit-event-badge">${escapeHtml(r.event)}</span>
+            <span class="${statusClass}">●  ${escapeHtml(r.status)}</span>
+            <span style="font-size:0.78rem;color:var(--text-dim)">actor: ${escapeHtml(r.actor)}</span>
+            ${r.target ? `<span style="font-size:0.78rem;color:var(--text-dim)">target: ${escapeHtml(r.target.substring(0, 32))}</span>` : ''}
+          </div>
+          <div class="audit-row-meta">🕐 ${escapeHtml(ts)}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  return { load, loadCompliance };
+})();
+
+// ============================================================
 // GLOBAL App OBJECT
 // ============================================================
 const App = {
@@ -574,20 +817,8 @@ const App = {
   sensors: Sensors,
   reports: Reports,
   admin:   Admin,
+  audit:   Audit,
 };
-
-// ============================================================
-// UTILITIES
-// ============================================================
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
-    .replace(/\n/g, '<br>');
-}
 
 // ============================================================
 // HEALTH CHECK & STATUS DOT
@@ -598,9 +829,11 @@ async function checkHealth() {
   try {
     await http.get('/admin/health');
     dot.className  = 'status-dot online';
+    dot.setAttribute('aria-label', 'Online');
     text.textContent = 'Online';
   } catch {
     dot.className  = 'status-dot offline';
+    dot.setAttribute('aria-label', 'Offline');
     text.textContent = 'Offline';
   }
 }
