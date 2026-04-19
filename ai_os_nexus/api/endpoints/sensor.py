@@ -100,6 +100,23 @@ async def list_sensors():
     return {"sensors": _sensors.list_sensors(), "stats": _sensors.get_stats()}
 
 
+@router.get("/latest-all")
+async def get_all_latest():
+    """Return the latest reading for every known sensor (dashboard view)."""
+    sensor_ids = _sensors.list_sensors()
+    sensors = []
+    for sid in sensor_ids:
+        reading = _sensors.get_latest(sid)
+        if reading:
+            sensors.append({
+                "sensor_id": reading.sensor_id,
+                "sensor_type": reading.data.get("sensor_type", reading.source),
+                "timestamp": reading.timestamp,
+                **reading.data,
+            })
+    return {"count": len(sensors), "sensors": sensors}
+
+
 @router.post("/trigger", status_code=201)
 async def register_trigger(body: TriggerRequest):
     """Register an alert trigger for a sensor field."""

@@ -5,251 +5,456 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Orkavia AI-OS Nexus — dual-mode AI operating system with IoT integration, consent-based memory, and hybrid search." />
   <meta name="author" content="Fasih ur Rehman" />
-  <meta name="copyright" content="© 2026 Fasih ur Rehman. All Rights Reserved." />
   <title>Orkavia AI-OS Nexus</title>
   <link rel="stylesheet" href="/static/css/styles.css" />
 </head>
 <body>
 
-  <!-- ===== SKIP LINK (accessibility) ===== -->
   <a href="#mainContent" class="skip-link">Skip to main content</a>
 
-  <!-- ===== SIDEBAR ===== -->
+  <!-- ═══════════════════════════ SIDEBAR ═══════════════════════════ -->
   <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
     <div class="sidebar-header">
-      <div class="logo" aria-label="Orkavia AI-OS Nexus">
-        <span class="logo-icon" aria-hidden="true">🧠</span>
-        <span class="logo-text">Orkavia AI-OS Nexus</span>
+      <div class="logo">
+        <div class="logo-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+            <circle cx="18" cy="18" r="16" stroke="url(#lg1)" stroke-width="2"/>
+            <circle cx="18" cy="10" r="3.5" fill="url(#lg2)"/>
+            <circle cx="10" cy="24" r="3.5" fill="url(#lg2)"/>
+            <circle cx="26" cy="24" r="3.5" fill="url(#lg2)"/>
+            <line x1="18" y1="13.5" x2="10" y2="20.5" stroke="url(#lg2)" stroke-width="1.5"/>
+            <line x1="18" y1="13.5" x2="26" y2="20.5" stroke="url(#lg2)" stroke-width="1.5"/>
+            <line x1="10" y1="24" x2="26" y2="24" stroke="url(#lg2)" stroke-width="1.5"/>
+            <defs>
+              <linearGradient id="lg1" x1="2" y1="2" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#a78bfa"/>
+                <stop offset="1" stop-color="#38bdf8"/>
+              </linearGradient>
+              <linearGradient id="lg2" x1="2" y1="2" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#a78bfa"/>
+                <stop offset="1" stop-color="#38bdf8"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo-text-wrap">
+          <span class="logo-name">AI-OS Nexus</span>
+          <span class="logo-by">by Fasih ur Rehman</span>
+        </div>
       </div>
-      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar" aria-expanded="true" aria-controls="sidebar">
-        <span aria-hidden="true">☰</span>
+      <button class="sidebar-collapse-btn" id="sidebarToggle" aria-label="Collapse sidebar" title="Collapse">
+        <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M13 4L7 10l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
     </div>
 
     <nav class="sidebar-nav" aria-label="Section navigation">
-      <a href="#chat"    class="nav-item active" data-section="chat"    aria-current="page">
-        <span class="nav-icon" aria-hidden="true">💬</span><span class="nav-label">Chat</span>
+      <a href="#chat"    class="nav-item active" data-section="chat">
+        <span class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18"><path d="M18 10c0 4.418-3.582 8-8 8a7.97 7.97 0 01-4-1.07L2 18l1.07-4A7.97 7.97 0 012 10c0-4.418 3.582-8 8-8s8 3.582 8 8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="nav-label">Chat</span>
       </a>
-      <a href="#memory"  class="nav-item" data-section="memory">
-        <span class="nav-icon" aria-hidden="true">🔒</span><span class="nav-label">Memory</span>
+      <a href="#decide"  class="nav-item" data-section="decide">
+        <span class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18"><path d="M10 2l2.4 5.26 5.6.54-4.1 3.77 1.3 5.43L10 14.27 4.8 17l1.3-5.43L2 7.8l5.6-.54L10 2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="nav-label">Decision Engine</span>
+        <span class="nav-badge">AI</span>
       </a>
       <a href="#sensors" class="nav-item" data-section="sensors">
-        <span class="nav-icon" aria-hidden="true">📡</span><span class="nav-label">Sensors</span>
+        <span class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18"><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M6.34 6.34a5 5 0 000 7.07M13.66 6.34a5 5 0 010 7.07M3.51 3.51a9 9 0 000 12.73M16.49 3.51a9 9 0 010 12.73" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="nav-label">Sensors</span>
+      </a>
+      <a href="#memory"  class="nav-item" data-section="memory">
+        <span class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18"><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M7 10h6M7 7h3M7 13h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="nav-label">Memory Vault</span>
       </a>
       <a href="#reports" class="nav-item" data-section="reports">
-        <span class="nav-icon" aria-hidden="true">📋</span><span class="nav-label">Reports</span>
+        <span class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18"><path d="M4 4h12a1 1 0 011 1v11a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1z" stroke="currentColor" stroke-width="1.6"/><path d="M7 8h6M7 11h4M7 14h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="nav-label">Reports</span>
       </a>
       <a href="#admin"   class="nav-item" data-section="admin">
-        <span class="nav-icon" aria-hidden="true">⚙️</span><span class="nav-label">Admin</span>
+        <span class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18"><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="nav-label">Admin</span>
       </a>
       <a href="#audit"   class="nav-item" data-section="audit">
-        <span class="nav-icon" aria-hidden="true">🔍</span><span class="nav-label">Audit</span>
+        <span class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18"><path d="M9 3H4a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V9M12 3h5v5M12 8l5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="nav-label">Audit</span>
       </a>
     </nav>
 
     <div class="sidebar-footer">
-      <div class="status-dot" id="statusDot" role="status" aria-live="polite" aria-label="Connection status"></div>
-      <span class="status-text" id="statusText">Connecting…</span>
+      <div class="status-indicator" id="statusIndicator">
+        <span class="status-dot" id="statusDot"></span>
+        <span class="status-text" id="statusText">Connecting…</span>
+      </div>
+      <div class="version-badge">v2.0.0</div>
     </div>
   </aside>
 
-  <!-- ===== MAIN CONTENT ===== -->
+  <!-- ═══════════════════════════ MAIN ═══════════════════════════════ -->
   <main class="main-content" id="mainContent" role="main">
 
-    <!-- ── HELP / ONBOARDING PANEL ── -->
+    <!-- ── HEADER ── -->
+    <header class="top-bar" role="banner">
+      <div class="top-bar-left">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu" aria-controls="sidebar" aria-expanded="false">
+          <svg viewBox="0 0 20 20" fill="none" width="20" height="20"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="breadcrumb">
+          <span class="breadcrumb-prefix">Nexus</span>
+          <span class="breadcrumb-sep">›</span>
+          <span class="breadcrumb-current" id="topBarTitle">Chat</span>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="top-bar-health" id="topBarHealth"></div>
+        <button class="btn-icon-top" id="helpBtn" aria-label="Help" title="Help &amp; onboarding">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.6"/><path d="M10 14v-1M10 10.5a2 2 0 10-2-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── HELP PANEL ── -->
     <div id="helpPanel" class="help-panel hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
       <div class="help-panel-inner">
-        <button class="help-close" id="helpClose" aria-label="Close help">✕</button>
-        <h2 id="helpTitle">👋 Welcome to Orkavia AI-OS Nexus</h2>
-        <p class="help-subtitle">A privacy-first AI operating system by <strong>Fasih ur Rehman</strong>.</p>
+        <button class="help-close" id="helpClose" aria-label="Close help">
+          <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="help-logo">
+          <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" width="56" height="56">
+            <circle cx="30" cy="30" r="28" stroke="url(#hlg)" stroke-width="2.5"/>
+            <circle cx="30" cy="18" r="5.5" fill="url(#hlg)"/>
+            <circle cx="18" cy="38" r="5.5" fill="url(#hlg)"/>
+            <circle cx="42" cy="38" r="5.5" fill="url(#hlg)"/>
+            <line x1="30" y1="23.5" x2="18" y2="32.5" stroke="url(#hlg)" stroke-width="2"/>
+            <line x1="30" y1="23.5" x2="42" y2="32.5" stroke="url(#hlg)" stroke-width="2"/>
+            <line x1="18" y1="38" x2="42" y2="38" stroke="url(#hlg)" stroke-width="2"/>
+            <defs>
+              <linearGradient id="hlg" x1="2" y1="2" x2="58" y2="58" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#a78bfa"/><stop offset="1" stop-color="#38bdf8"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <h2 id="helpTitle">Welcome to Orkavia AI-OS Nexus</h2>
+        <p class="help-subtitle">A privacy-first, dual-mode AI operating system by <strong>Fasih ur Rehman</strong></p>
         <div class="help-grid">
-          <div class="help-card">
-            <span class="help-icon" aria-hidden="true">💬</span>
-            <h3>Chat</h3>
-            <p>Ask questions in <strong>Public</strong> mode (no memory) or <strong>Private</strong> mode (encrypted memory per user).</p>
-          </div>
-          <div class="help-card">
-            <span class="help-icon" aria-hidden="true">🔒</span>
-            <h3>Memory Vault</h3>
-            <p>View, search, export, or delete your private encrypted memories. Full GDPR right-to-erasure support.</p>
-          </div>
-          <div class="help-card">
-            <span class="help-icon" aria-hidden="true">📡</span>
-            <h3>Sensors</h3>
-            <p>Monitor real-time IoT data: irrigation, hospital vitals, and industrial equipment.</p>
-          </div>
-          <div class="help-card">
-            <span class="help-icon" aria-hidden="true">📋</span>
-            <h3>Reports</h3>
-            <p>Generate AI-powered analysis reports for any domain: agriculture, medical, industrial, technical.</p>
-          </div>
-          <div class="help-card">
-            <span class="help-icon" aria-hidden="true">⚙️</span>
-            <h3>Admin</h3>
-            <p>System health, stats, safety overrides, and maintenance operations.</p>
-          </div>
-          <div class="help-card">
-            <span class="help-icon" aria-hidden="true">🔍</span>
-            <h3>Audit</h3>
-            <p>Compliance audit log and statistics for all critical actions — privacy-respecting, no sensitive payloads.</p>
-          </div>
+          <div class="help-card"><div class="help-card-icon chat-icon">💬</div><h3>Chat</h3><p>Ask anything in <strong>Public</strong> (stateless) or <strong>Private</strong> (encrypted memory) mode.</p></div>
+          <div class="help-card"><div class="help-card-icon ai-icon">⚡</div><h3>Decision Engine</h3><p>Run real-time AI + rule-based decisions for <strong>irrigation</strong>, <strong>hospital</strong>, and <strong>industrial</strong> domains.</p></div>
+          <div class="help-card"><div class="help-card-icon sensor-icon">📡</div><h3>Sensors</h3><p>Monitor live IoT data with auto-simulation and real-time decision analysis.</p></div>
+          <div class="help-card"><div class="help-card-icon mem-icon">🔒</div><h3>Memory Vault</h3><p>View, export, or delete your AES-256 encrypted private memories (GDPR compliant).</p></div>
+          <div class="help-card"><div class="help-card-icon report-icon">📋</div><h3>Reports</h3><p>Generate AI-powered domain reports: agriculture, medical, industrial, BRDs.</p></div>
+          <div class="help-card"><div class="help-card-icon audit-icon">🔍</div><h3>Audit</h3><p>Full compliance log — every critical operation, privacy-masked, append-only.</p></div>
         </div>
         <div class="help-footer">
-          <label class="help-dont-show">
-            <input type="checkbox" id="dontShowHelp" /> Don't show again
+          <label class="checkbox-label">
+            <input type="checkbox" id="dontShowHelp" />
+            <span>Don't show again</span>
           </label>
           <button class="btn-primary" id="helpDismiss">Get Started →</button>
         </div>
       </div>
     </div>
 
-    <!-- ── HEADER BAR ── -->
-    <header class="top-bar" role="banner">
-      <div class="top-bar-left">
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu" aria-controls="sidebar" aria-expanded="false">
-          <span aria-hidden="true">☰</span>
-        </button>
-        <span class="top-bar-title" id="topBarTitle">Chat</span>
-      </div>
-      <div class="top-bar-right">
-        <button class="btn-icon" id="helpBtn" aria-label="Open help and onboarding" title="Help">
-          <span aria-hidden="true">❓</span>
-        </button>
-      </div>
-    </header>
-
-    <!-- ── CHAT SECTION ── -->
+    <!-- ═══════════════ CHAT SECTION ════════════════════════════════════ -->
     <section class="section" id="section-chat" aria-labelledby="chat-heading">
       <div class="section-header">
-        <h1 id="chat-heading">💬 AI Chat</h1>
-        <p class="section-desc">Ask anything — knowledge base + IoT integration</p>
+        <div>
+          <h1 id="chat-heading">AI Chat</h1>
+          <p class="section-desc">Knowledge base · IoT integration · Encrypted memory</p>
+        </div>
       </div>
 
-      <!-- Mode & Consent Bar -->
-      <div class="chat-controls" role="group" aria-label="Chat mode and consent settings">
-        <div class="control-group">
-          <label id="mode-label">Mode</label>
-          <div class="toggle-group" id="modeToggle" role="radiogroup" aria-labelledby="mode-label">
-            <button class="toggle-btn active" data-value="public" role="radio" aria-checked="true">🌐 Public</button>
-            <button class="toggle-btn"        data-value="private" role="radio" aria-checked="false">🔒 Private</button>
+      <div class="chat-config-bar" role="group" aria-label="Chat configuration">
+        <div class="config-item">
+          <span class="config-label">Mode</span>
+          <div class="pill-toggle" id="modeToggle" role="radiogroup" aria-label="Chat mode">
+            <button class="pill-btn active" data-value="public" role="radio" aria-checked="true">
+              <svg viewBox="0 0 16 16" fill="none" width="13" height="13"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 2a6 6 0 010 12M8 2a6 6 0 000 12M2 8h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Public
+            </button>
+            <button class="pill-btn" data-value="private" role="radio" aria-checked="false">
+              <svg viewBox="0 0 16 16" fill="none" width="13" height="13"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              Private
+            </button>
           </div>
         </div>
-        <div class="control-group">
-          <label for="memoryConsent">Memory Consent</label>
-          <select id="memoryConsent" class="select-input" aria-describedby="consent-desc">
-            <option value="NONE">None — not stored</option>
-            <option value="PRIVATE">Private — encrypted</option>
+        <div class="config-item">
+          <label for="memoryConsent" class="config-label">Memory</label>
+          <select id="memoryConsent" class="select-input">
+            <option value="NONE">None</option>
+            <option value="PRIVATE">Private (AES-256)</option>
             <option value="ANON_LEARN">Anon Learn</option>
             <option value="PUBLIC">Public KB</option>
           </select>
-          <span id="consent-desc" class="sr-only">Controls how your conversation is stored</span>
         </div>
-        <div class="control-group">
-          <label for="userId">User ID</label>
-          <input type="text" id="userId" class="text-input" placeholder="user-001" value="user-001"
-                 aria-describedby="userid-desc" autocomplete="username" />
-          <span id="userid-desc" class="sr-only">Your user identifier for private memory storage</span>
+        <div class="config-item">
+          <label for="userId" class="config-label">User ID</label>
+          <input type="text" id="userId" class="text-input compact" placeholder="user-001" value="user-001" autocomplete="username" />
         </div>
+        <button class="btn-ghost" onclick="App.chat.clear()" title="Clear conversation">
+          <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M2 4h12M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1M13 4l-.87 9.13A1 1 0 0111.14 14H4.86a1 1 0 01-.99-.87L3 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Clear
+        </button>
       </div>
 
-      <!-- Messages -->
       <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Chat messages">
-        <div class="welcome-msg">
-          <div class="welcome-icon" aria-hidden="true">🧠</div>
-          <h2>Welcome to Orkavia AI-OS Nexus</h2>
-          <p>Ask me anything about science, programming, irrigation, medical monitoring, industrial automation, or general knowledge.</p>
-          <button class="btn-secondary mt-8" id="welcomeHelpBtn">Learn how to use this app →</button>
+        <div class="welcome-msg" id="welcomeMsg">
+          <div class="welcome-visual">
+            <div class="welcome-ring ring1"></div>
+            <div class="welcome-ring ring2"></div>
+            <div class="welcome-ring ring3"></div>
+            <div class="welcome-core">
+              <svg viewBox="0 0 60 60" fill="none" width="36" height="36">
+                <circle cx="30" cy="18" r="5" fill="url(#wlg)"/>
+                <circle cx="18" cy="38" r="5" fill="url(#wlg)"/>
+                <circle cx="42" cy="38" r="5" fill="url(#wlg)"/>
+                <line x1="30" y1="23" x2="18" y2="33" stroke="url(#wlg)" stroke-width="1.8"/>
+                <line x1="30" y1="23" x2="42" y2="33" stroke="url(#wlg)" stroke-width="1.8"/>
+                <line x1="18" y1="38" x2="42" y2="38" stroke="url(#wlg)" stroke-width="1.8"/>
+                <defs><linearGradient id="wlg" x1="0" y1="0" x2="60" y2="60" gradientUnits="userSpaceOnUse"><stop stop-color="#a78bfa"/><stop offset="1" stop-color="#38bdf8"/></linearGradient></defs>
+              </svg>
+            </div>
+          </div>
+          <h2>Orkavia AI-OS Nexus</h2>
+          <p>Ask me about science, programming, agriculture, medical monitoring, industrial automation, or anything in your knowledge base.</p>
+          <div class="welcome-chips">
+            <button class="chip" onclick="App.chat.inject('What is the optimal soil moisture for wheat crops?')">🌱 Irrigation query</button>
+            <button class="chip" onclick="App.chat.inject('Explain patient vital signs monitoring')">🏥 Medical vitals</button>
+            <button class="chip" onclick="App.chat.inject('How does industrial pressure monitoring work?')">🏭 Industrial</button>
+            <button class="chip" onclick="App.chat.inject('How does the AES-256 memory encryption work?')">🔒 Privacy</button>
+          </div>
         </div>
       </div>
 
-      <!-- Input Bar -->
-      <div class="chat-input-bar" role="group" aria-label="Message input">
+      <div class="chat-input-bar">
         <label for="chatInput" class="sr-only">Type your message</label>
         <textarea
           id="chatInput"
           class="chat-textarea"
           placeholder="Ask anything… (Enter to send, Shift+Enter for newline)"
           rows="1"
-          aria-label="Chat message input"
           autocomplete="off"
           spellcheck="true"
         ></textarea>
-        <button id="sendBtn" class="send-btn" aria-label="Send message" title="Send (Enter)">
-          <span id="sendIcon" aria-hidden="true">➤</span>
+        <button id="sendBtn" class="send-btn" aria-label="Send message">
+          <svg viewBox="0 0 20 20" fill="none" width="18" height="18"><path d="M18 10L3 3l3.5 7L3 17l15-7z" fill="currentColor"/></svg>
         </button>
       </div>
-      <div class="chat-meta" id="chatMeta" aria-live="polite" role="status"></div>
+      <div class="chat-status-bar" id="chatMeta" aria-live="polite" role="status"></div>
     </section>
 
-    <!-- ── MEMORY SECTION ── -->
-    <section class="section hidden" id="section-memory" aria-labelledby="memory-heading">
+    <!-- ═══════════════ DECISION ENGINE ═══════════════════════════════ -->
+    <section class="section hidden" id="section-decide" aria-labelledby="decide-heading">
       <div class="section-header">
-        <h1 id="memory-heading">🔒 Memory Vault</h1>
-        <p class="section-desc">View, search, and manage your private encrypted memories</p>
+        <div>
+          <h1 id="decide-heading">Decision Engine</h1>
+          <p class="section-desc">AI + rule-based hybrid decisions with safety validation</p>
+        </div>
       </div>
 
-      <div class="memory-controls" role="group" aria-label="Memory management controls">
-        <label for="memUserId" class="sr-only">User ID for memory lookup</label>
-        <input type="text" id="memUserId" class="text-input" placeholder="User ID" value="user-001"
-               aria-label="User ID for memory lookup" autocomplete="username" />
-        <button class="btn-primary" onclick="App.memory.load()" aria-label="Load memories for this user">🔍 Load Memories</button>
-        <button class="btn-danger"  onclick="App.memory.deleteAll()" aria-label="Delete all memories for this user">🗑️ Delete All</button>
-        <button class="btn-secondary" onclick="App.memory.exportData()" aria-label="Export memories as JSON">📤 Export</button>
+      <div class="decide-grid">
+        <!-- Manual Decision Form -->
+        <div class="card decide-form-card">
+          <h2 class="card-title">
+            <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M10 2l2.4 5.26 5.6.54-4.1 3.77 1.3 5.43L10 14.27 4.8 17l1.3-5.43L2 7.8l5.6-.54L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            Run Decision
+          </h2>
+          <div class="form-group">
+            <label for="decideDomain">Domain</label>
+            <select id="decideDomain" class="select-input" onchange="App.decide.updateContextTemplate()">
+              <option value="irrigation">🌱 Irrigation</option>
+              <option value="hospital">🏥 Hospital</option>
+              <option value="industrial">🏭 Industrial</option>
+              <option value="general">🔮 General</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="decideContext">Context (JSON)</label>
+            <textarea id="decideContext" class="code-textarea" rows="8" spellcheck="false">{
+  "soil_moisture": 28,
+  "temperature": 32,
+  "rain_probability": 0.15,
+  "pressure": 3.2,
+  "flow_rate": 14
+}</textarea>
+          </div>
+          <div class="form-row-inline">
+            <label class="checkbox-label">
+              <input type="checkbox" id="decideSafety" checked />
+              <span>Apply safety validation</span>
+            </label>
+            <button class="btn-primary" onclick="App.decide.run()">
+              <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M3 8l4 4 6-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Run Analysis
+            </button>
+          </div>
+        </div>
+
+        <!-- Decision Result -->
+        <div class="card decide-result-card">
+          <h2 class="card-title">
+            <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v4l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            Decision Result
+          </h2>
+          <div id="decideResult" class="decide-result-placeholder">
+            <div class="placeholder-icon">⚡</div>
+            <p>Configure context and click Run Analysis to see the AI decision.</p>
+          </div>
+        </div>
       </div>
 
-      <div class="memory-stats" id="memoryStats" aria-live="polite" role="region" aria-label="Memory statistics"></div>
-      <div class="memory-list" id="memoryList" role="list" aria-live="polite" aria-label="Memory entries">
-        <div class="empty-state">
-          <span aria-hidden="true">📭</span>
-          <p>Enter a User ID and click "Load Memories" to view stored memories.</p>
+      <!-- Simulate with decision -->
+      <div class="card simulate-card">
+        <h2 class="card-title">
+          <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M10 2v4M10 14v4M4.93 4.93l2.83 2.83M12.24 12.24l2.83 2.83M2 10h4M14 10h4M4.93 15.07l2.83-2.83M12.24 7.76l2.83-2.83" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Live Simulation
+        </h2>
+        <p class="card-desc">Generate realistic sensor data and run the decision engine in real-time.</p>
+        <div class="simulate-controls">
+          <div class="form-group">
+            <label for="simType">Sensor Type</label>
+            <select id="simType" class="select-input">
+              <option value="irrigation">🌱 Irrigation</option>
+              <option value="hospital">🏥 Hospital</option>
+              <option value="industrial">🏭 Industrial</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="simCount">Readings</label>
+            <input type="number" id="simCount" class="text-input compact" value="3" min="1" max="10" />
+          </div>
+          <button class="btn-primary" onclick="App.decide.simulate()">
+            <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><polygon points="4,2 14,8 4,14" fill="currentColor"/></svg>
+            Simulate
+          </button>
+          <button class="btn-secondary" id="liveStreamBtn" onclick="App.decide.toggleLiveStream()">
+            <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><circle cx="8" cy="8" r="3" fill="currentColor"/><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/></svg>
+            Live Stream
+          </button>
+        </div>
+        <div id="simulateResults" class="simulate-results" aria-live="polite"></div>
+      </div>
+
+      <!-- Decision History -->
+      <div class="card">
+        <div class="card-header-row">
+          <h2 class="card-title">
+            <svg viewBox="0 0 20 20" fill="none" width="16" height="16"><path d="M10 6v4l3 2M10 2a8 8 0 100 16A8 8 0 0010 2z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            Decision History
+          </h2>
+          <button class="btn-ghost" onclick="App.decide.loadHistory()">Refresh</button>
+        </div>
+        <div id="decideHistory" class="decision-history" aria-live="polite">
+          <div class="empty-state"><span>⚡</span><p>No decisions yet. Run an analysis above.</p></div>
         </div>
       </div>
     </section>
 
-    <!-- ── SENSORS SECTION ── -->
+    <!-- ═══════════════ SENSORS SECTION ═══════════════════════════════ -->
     <section class="section hidden" id="section-sensors" aria-labelledby="sensors-heading">
       <div class="section-header">
-        <h1 id="sensors-heading">📡 Sensor Dashboard</h1>
-        <p class="section-desc">Real-time IoT sensor monitoring</p>
+        <div>
+          <h1 id="sensors-heading">Sensor Dashboard</h1>
+          <p class="section-desc">Real-time IoT monitoring with AI-powered analysis</p>
+        </div>
       </div>
 
-      <div class="sensor-controls" role="group" aria-label="Sensor controls">
-        <button class="btn-primary" onclick="App.sensors.injectDemo('irrigation')" aria-label="Inject demo irrigation sensor data">🌱 Inject Irrigation</button>
-        <button class="btn-primary" onclick="App.sensors.injectDemo('hospital')"   aria-label="Inject demo hospital sensor data">🏥 Inject Hospital</button>
-        <button class="btn-primary" onclick="App.sensors.injectDemo('industrial')" aria-label="Inject demo industrial sensor data">🏭 Inject Industrial</button>
-        <button class="btn-secondary" onclick="App.sensors.refresh()" aria-label="Refresh sensor readings">🔄 Refresh</button>
-        <label class="auto-refresh-label" for="autoRefresh">
-          <input type="checkbox" id="autoRefresh" onchange="App.sensors.toggleAutoRefresh(this.checked)" />
-          Auto-refresh (5s)
-        </label>
+      <div class="sensor-toolbar" role="group" aria-label="Sensor controls">
+        <div class="sensor-inject-group">
+          <span class="toolbar-label">Inject:</span>
+          <button class="btn-tag green"  onclick="App.sensors.injectDemo('irrigation')">🌱 Irrigation</button>
+          <button class="btn-tag blue"   onclick="App.sensors.injectDemo('hospital')">🏥 Hospital</button>
+          <button class="btn-tag orange" onclick="App.sensors.injectDemo('industrial')">🏭 Industrial</button>
+        </div>
+        <div class="sensor-right-controls">
+          <button class="btn-ghost" onclick="App.sensors.refresh()">
+            <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M13.5 3A7 7 0 103 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M13.5 3v4h-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Refresh
+          </button>
+          <label class="toggle-switch-label">
+            <input type="checkbox" id="autoRefresh" class="toggle-switch-input" onchange="App.sensors.toggleAutoRefresh(this.checked)">
+            <span class="toggle-switch"></span>
+            <span>Auto-refresh</span>
+          </label>
+        </div>
       </div>
 
-      <div class="sensor-grid" id="sensorGrid" role="list" aria-live="polite" aria-label="Sensor readings">
-        <div class="empty-state">
-          <span aria-hidden="true">📡</span>
-          <p>Inject sensor data or connect real sensors to see readings here.</p>
+      <div class="sensor-grid" id="sensorGrid" role="list" aria-live="polite">
+        <div class="empty-state col-span-all">
+          <div class="empty-icon">📡</div>
+          <p>Inject sensor data above to see live readings here.</p>
         </div>
       </div>
     </section>
 
-    <!-- ── REPORTS SECTION ── -->
-    <section class="section hidden" id="section-reports" aria-labelledby="reports-heading">
+    <!-- ═══════════════ MEMORY SECTION ════════════════════════════════ -->
+    <section class="section hidden" id="section-memory" aria-labelledby="memory-heading">
       <div class="section-header">
-        <h1 id="reports-heading">📋 Reports</h1>
-        <p class="section-desc">AI-powered analysis and documentation</p>
+        <div>
+          <h1 id="memory-heading">Memory Vault</h1>
+          <p class="section-desc">AES-256 encrypted per-user memory — GDPR compliant</p>
+        </div>
       </div>
 
-      <div class="report-form card" role="form" aria-label="Generate report form">
-        <h2 class="card-title">Generate New Report</h2>
+      <div class="memory-toolbar">
+        <div class="memory-search-row">
+          <label for="memUserId" class="sr-only">User ID</label>
+          <input type="text" id="memUserId" class="text-input" placeholder="User ID (e.g. user-001)" value="user-001" autocomplete="username" />
+          <button class="btn-primary" onclick="App.memory.load()">
+            <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            Load
+          </button>
+          <button class="btn-ghost" onclick="App.memory.exportData()">
+            <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M8 10V2M5 7l3 3 3-3M3 12v1a1 1 0 001 1h8a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Export
+          </button>
+          <button class="btn-danger-ghost" onclick="App.memory.deleteAll()">
+            <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M2 4h12M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1M13 4l-.87 9.13A1 1 0 0111.14 14H4.86a1 1 0 01-.99-.87L3 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Delete All
+          </button>
+        </div>
+      </div>
+
+      <div class="memory-stats-bar" id="memoryStats" aria-live="polite"></div>
+      <div class="memory-list" id="memoryList" role="list" aria-live="polite">
+        <div class="empty-state">
+          <div class="empty-icon">🔒</div>
+          <p>Enter a User ID and click Load to view encrypted memories.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ REPORTS SECTION ════════════════════════════════ -->
+    <section class="section hidden" id="section-reports" aria-labelledby="reports-heading">
+      <div class="section-header">
+        <div>
+          <h1 id="reports-heading">AI Reports</h1>
+          <p class="section-desc">Domain-specific analysis with knowledge base integration</p>
+        </div>
+      </div>
+
+      <div class="report-form card">
+        <h2 class="card-title">Generate Report</h2>
         <div class="form-row">
           <div class="form-group">
             <label for="reportTopic">Topic</label>
-            <input type="text" id="reportTopic" class="text-input" placeholder="e.g. Irrigation optimisation for wheat"
-                   aria-required="true" />
+            <input type="text" id="reportTopic" class="text-input" placeholder="e.g. Optimising drip irrigation for wheat in semi-arid zones" />
           </div>
           <div class="form-group">
             <label for="reportType">Report Type</label>
-            <select id="reportType" class="select-input" aria-required="true">
+            <select id="reportType" class="select-input">
               <option value="general">General Analysis</option>
               <option value="irrigation">Irrigation Report</option>
               <option value="hospital">Hospital / Medical</option>
@@ -259,79 +464,90 @@
             </select>
           </div>
         </div>
-        <button class="btn-primary" onclick="App.reports.generate()" aria-label="Generate report">🚀 Generate Report</button>
+        <button class="btn-primary" onclick="App.reports.generate()">
+          <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M3 8l4 4 6-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Generate Report
+        </button>
       </div>
 
-      <div id="reportResult" class="report-result" role="region" aria-live="polite" aria-label="Generated report"></div>
-      <div class="report-history" id="reportHistory" role="list" aria-label="Report history"></div>
+      <div id="reportResult" class="report-result" aria-live="polite"></div>
+      <div class="report-history" id="reportHistory" role="list"></div>
     </section>
 
-    <!-- ── ADMIN SECTION ── -->
+    <!-- ═══════════════ ADMIN SECTION ════════════════════════════════ -->
     <section class="section hidden" id="section-admin" aria-labelledby="admin-heading">
       <div class="section-header">
-        <h1 id="admin-heading">⚙️ Admin Panel</h1>
-        <p class="section-desc">System health, stats, and safety management</p>
+        <div>
+          <h1 id="admin-heading">Admin Panel</h1>
+          <p class="section-desc">System health, statistics, and safety management</p>
+        </div>
       </div>
 
       <div class="admin-grid">
-        <!-- Health Card -->
-        <div class="card" role="region" aria-labelledby="health-card-title">
-          <h2 class="card-title" id="health-card-title">🟢 System Health</h2>
-          <div id="healthContent" class="skeleton-loader" aria-live="polite">Loading…</div>
-          <button class="btn-secondary mt-8" onclick="App.admin.loadHealth()" aria-label="Refresh health status">Refresh</button>
+        <div class="card">
+          <div class="card-header-row">
+            <h2 class="card-title">System Health</h2>
+            <div id="healthBadge" class="health-badge"></div>
+          </div>
+          <div id="healthContent" class="skeleton-shimmer">Loading…</div>
+          <button class="btn-ghost mt-8" onclick="App.admin.loadHealth()">Refresh</button>
         </div>
 
-        <!-- Stats Card -->
-        <div class="card" role="region" aria-labelledby="stats-card-title">
-          <h2 class="card-title" id="stats-card-title">📊 System Stats</h2>
-          <div id="statsContent" class="skeleton-loader" aria-live="polite">Loading…</div>
-          <button class="btn-secondary mt-8" onclick="App.admin.loadStats()" aria-label="Refresh system stats">Refresh</button>
+        <div class="card">
+          <div class="card-header-row">
+            <h2 class="card-title">Statistics</h2>
+          </div>
+          <div id="statsContent" class="skeleton-shimmer">Loading…</div>
+          <button class="btn-ghost mt-8" onclick="App.admin.loadStats()">Refresh</button>
         </div>
 
-        <!-- Dataset Card -->
-        <div class="card" role="region" aria-labelledby="dataset-card-title">
-          <h2 class="card-title" id="dataset-card-title">📦 Dataset Stats</h2>
-          <div id="datasetContent" class="skeleton-loader" aria-live="polite">Loading…</div>
+        <div class="card">
+          <h2 class="card-title">Dataset</h2>
+          <div id="datasetContent" class="skeleton-shimmer">Loading…</div>
         </div>
 
-        <!-- Safety Override Card -->
-        <div class="card" role="form" aria-labelledby="override-card-title">
-          <h2 class="card-title" id="override-card-title">🛡️ Safety Override</h2>
+        <div class="card">
+          <h2 class="card-title">Safety Override</h2>
           <div class="form-group">
             <label for="overrideActionId">Action ID</label>
-            <input type="text" id="overrideActionId" class="text-input" placeholder="action-uuid" aria-required="true" />
+            <input type="text" id="overrideActionId" class="text-input" placeholder="action-uuid" />
           </div>
           <div class="form-group">
             <label for="overrideAdminId">Admin ID</label>
-            <input type="text" id="overrideAdminId" class="text-input" placeholder="admin-001" value="admin-001" aria-required="true" />
+            <input type="text" id="overrideAdminId" class="text-input" value="admin-001" />
           </div>
           <div class="form-group">
-            <label for="overrideReason">Reason</label>
-            <input type="text" id="overrideReason" class="text-input" placeholder="Authorised override for…" aria-required="true" />
+            <label for="overrideReason">Reason (min 10 chars)</label>
+            <input type="text" id="overrideReason" class="text-input" placeholder="Authorised override for…" />
           </div>
-          <button class="btn-warning" onclick="App.admin.safetyOverride()" aria-label="Apply safety override">⚡ Apply Override</button>
+          <button class="btn-warning" onclick="App.admin.safetyOverride()">Apply Override</button>
         </div>
 
-        <!-- Maintenance -->
-        <div class="card" role="region" aria-labelledby="maintenance-card-title">
-          <h2 class="card-title" id="maintenance-card-title">🧹 Maintenance</h2>
-          <button class="btn-danger" onclick="App.admin.purgeExpiredMemory()" aria-label="Purge expired memory entries">🗑️ Purge Expired Memories</button>
-          <div id="maintenanceMsg" class="mt-8" aria-live="polite" role="status"></div>
+        <div class="card">
+          <h2 class="card-title">Maintenance</h2>
+          <p class="card-desc">Purge expired memory entries and clean up system data.</p>
+          <button class="btn-danger" onclick="App.admin.purgeExpiredMemory()">
+            <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M2 4h12M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1M13 4l-.87 9.13A1 1 0 0111.14 14H4.86a1 1 0 01-.99-.87L3 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Purge Expired
+          </button>
+          <div id="maintenanceMsg" class="maintenance-msg mt-8" aria-live="polite"></div>
         </div>
       </div>
     </section>
 
-    <!-- ── AUDIT SECTION ── -->
+    <!-- ═══════════════ AUDIT SECTION ════════════════════════════════ -->
     <section class="section hidden" id="section-audit" aria-labelledby="audit-heading">
       <div class="section-header">
-        <h1 id="audit-heading">🔍 Audit &amp; Compliance</h1>
-        <p class="section-desc">Privacy-respecting audit trail — no sensitive payloads exposed</p>
+        <div>
+          <h1 id="audit-heading">Audit &amp; Compliance</h1>
+          <p class="section-desc">Append-only audit log — sensitive data automatically masked</p>
+        </div>
       </div>
 
-      <div class="audit-controls" role="group" aria-label="Audit log controls">
-        <div class="control-group">
-          <label for="auditEventFilter">Event Filter</label>
-          <select id="auditEventFilter" class="select-input" aria-label="Filter audit events">
+      <div class="audit-toolbar">
+        <div class="form-group inline">
+          <label for="auditEventFilter">Filter by event</label>
+          <select id="auditEventFilter" class="select-input">
             <option value="">All events</option>
             <option value="memory.store">memory.store</option>
             <option value="memory.delete">memory.delete</option>
@@ -340,36 +556,34 @@
             <option value="safety.override">safety.override</option>
             <option value="safety.blocked">safety.blocked</option>
             <option value="admin.purge_expired">admin.purge_expired</option>
-            <option value="admin.export_dataset">admin.export_dataset</option>
             <option value="api.ask">api.ask</option>
           </select>
         </div>
-        <button class="btn-primary" onclick="App.audit.load()" aria-label="Load audit log">🔍 Load Audit Log</button>
-        <button class="btn-secondary" onclick="App.audit.loadCompliance()" aria-label="Load compliance summary">📊 Compliance Summary</button>
+        <button class="btn-primary" onclick="App.audit.load()">Load Log</button>
+        <button class="btn-ghost" onclick="App.audit.loadCompliance()">Compliance Summary</button>
       </div>
 
-      <div id="complianceStats" class="compliance-stats" role="region" aria-live="polite" aria-label="Compliance statistics"></div>
-      <div id="auditList" class="audit-list" role="log" aria-live="polite" aria-label="Audit log entries">
+      <div id="complianceStats" class="compliance-stats-grid" aria-live="polite"></div>
+      <div id="auditList" class="audit-list" role="log" aria-live="polite">
         <div class="empty-state">
-          <span aria-hidden="true">🔍</span>
-          <p>Click "Load Audit Log" to view recent audit events.</p>
+          <div class="empty-icon">🔍</div>
+          <p>Click "Load Log" to view recent audit events.</p>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- ===== FOOTER ===== -->
+  <!-- ═══ FOOTER ═══ -->
   <footer class="site-footer" role="contentinfo">
-    <p>
-      <span aria-hidden="true">🧠</span>
-      <strong>Orkavia AI-OS Nexus</strong>
-      &nbsp;·&nbsp;
-      <span>© 2026 <strong>Fasih ur Rehman</strong>. All Rights Reserved.</span>
-    </p>
+    <span>Orkavia AI-OS Nexus</span>
+    <span class="footer-sep">·</span>
+    <span>© 2026 <strong>Fasih ur Rehman</strong>. All Rights Reserved.</span>
+    <span class="footer-sep">·</span>
+    <span>Privacy-First · AES-256 · GDPR</span>
   </footer>
 
-  <!-- Toast notifications -->
+  <!-- Toast container -->
   <div id="toastContainer" class="toast-container" role="status" aria-live="assertive" aria-atomic="false"></div>
 
   <script src="/static/js/app.js"></script>

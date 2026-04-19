@@ -20,7 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from ai_os_nexus.api.endpoints import ask, memory, sensor, report, admin
+from ai_os_nexus.api.endpoints import ask, memory, sensor, report, admin, decide
 from ai_os_nexus.dataset.dataset_manager import DatasetManager
 from ai_os_nexus.dataset.seed_data import seed_dataset
 from ai_os_nexus.core.tri_index_search import TriIndexSearch
@@ -154,6 +154,7 @@ app.include_router(memory.router)
 app.include_router(sensor.router)
 app.include_router(report.router)
 app.include_router(admin.router)
+app.include_router(decide.router)
 
 # ---------------------------------------------------------------------------
 # Static frontend
