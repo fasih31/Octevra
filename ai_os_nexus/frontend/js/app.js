@@ -40,7 +40,12 @@ function toast(msg, type = 'info', duration = 4000) {
   const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
   const el = document.createElement('div');
   el.className = `toast ${type}`;
-  el.innerHTML = `<span>${icons[type] || ''}</span><span>${msg}</span>`;
+  const iconSpan = document.createElement('span');
+  iconSpan.textContent = icons[type] || '';
+  const msgSpan = document.createElement('span');
+  msgSpan.textContent = String(msg);
+  el.appendChild(iconSpan);
+  el.appendChild(msgSpan);
   document.getElementById('toastContainer').appendChild(el);
   setTimeout(() => el.remove(), duration);
 }
@@ -206,17 +211,27 @@ const Memory = (() => {
       return;
     }
 
-    list.innerHTML = entries.map(e => `
+    list.innerHTML = entries.map(e => {
+      const safeId = escapeHtml(e.id);
+      const safeUserId = escapeHtml(userId);
+      const safeMode = escapeHtml(e.mode);
+      const safeContent = escapeHtml(e.content.substring(0, 300)) + (e.content.length > 300 ? '…' : '');
+      const created = new Date(e.created_at * 1000).toLocaleString();
+      const expires = e.expires_at
+        ? `<span>Expires: ${escapeHtml(new Date(e.expires_at * 1000).toLocaleDateString())}</span>`
+        : '';
+      return `
       <div class="memory-card">
-        <button class="mem-delete-btn" onclick="App.memory.deleteOne('${userId}','${e.id}')">✕</button>
-        <div class="mem-content">${escapeHtml(e.content.substring(0, 300))}${e.content.length > 300 ? '…' : ''}</div>
+        <button class="mem-delete-btn" onclick="App.memory.deleteOne('${safeUserId}','${safeId}')">✕</button>
+        <div class="mem-content">${safeContent}</div>
         <div class="mem-meta">
-          <span class="mode-badge mode-${e.mode}">${e.mode}</span>
-          <span>🕐 ${new Date(e.created_at * 1000).toLocaleString()}</span>
-          ${e.expires_at ? `<span>Expires: ${new Date(e.expires_at * 1000).toLocaleDateString()}</span>` : ''}
+          <span class="mode-badge mode-${safeMode}">${safeMode}</span>
+          <span>🕐 ${escapeHtml(created)}</span>
+          ${expires}
         </div>
       </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   async function deleteOne(userId, memId) {
@@ -262,16 +277,20 @@ const Memory = (() => {
 const Sensors = (() => {
   let autoRefreshTimer = null;
 
+  // Pseudorandom value for non-security demo sensor data simulation only
+  function rnd(min, max) { return Math.random() * (max - min) + min; }
+  function rndInt(min, max) { return Math.floor(rnd(min, max + 1)); }
+
   const demoData = {
     irrigation: {
       sensor_id: 'irr-001',
       data: {
-        soil_moisture: +(Math.random() * 60 + 20).toFixed(1),
-        temperature: +(Math.random() * 20 + 18).toFixed(1),
-        rain_probability: +(Math.random() * 0.8).toFixed(2),
-        pressure: +(Math.random() * 3 + 2).toFixed(2),
-        flow_rate: +(Math.random() * 20 + 8).toFixed(1),
-        humidity: +(Math.random() * 40 + 40).toFixed(1),
+        soil_moisture: +rnd(20, 80).toFixed(1),
+        temperature: +rnd(18, 38).toFixed(1),
+        rain_probability: +rnd(0, 0.8).toFixed(2),
+        pressure: +rnd(2, 5).toFixed(2),
+        flow_rate: +rnd(8, 28).toFixed(1),
+        humidity: +rnd(40, 80).toFixed(1),
         status: 'OK',
       },
       source: 'demo',
@@ -279,12 +298,12 @@ const Sensors = (() => {
     hospital: {
       sensor_id: 'hosp-001',
       data: {
-        heart_rate: Math.floor(Math.random() * 40 + 65),
-        bp_systolic: Math.floor(Math.random() * 30 + 110),
-        bp_diastolic: Math.floor(Math.random() * 20 + 70),
-        oxygen: +(Math.random() * 4 + 96).toFixed(1),
-        temperature: +(Math.random() * 1 + 36.5).toFixed(1),
-        respiratory_rate: Math.floor(Math.random() * 6 + 14),
+        heart_rate: rndInt(65, 105),
+        bp_systolic: rndInt(110, 140),
+        bp_diastolic: rndInt(70, 90),
+        oxygen: +rnd(96, 100).toFixed(1),
+        temperature: +rnd(36.5, 37.5).toFixed(1),
+        respiratory_rate: rndInt(14, 20),
         alert_type: 'NORMAL',
       },
       source: 'demo',
@@ -292,11 +311,11 @@ const Sensors = (() => {
     industrial: {
       sensor_id: 'ind-001',
       data: {
-        pressure: +(Math.random() * 4 + 3).toFixed(2),
-        temperature: +(Math.random() * 30 + 50).toFixed(1),
-        vibration: +(Math.random() * 1.5 + 0.3).toFixed(3),
-        flow_rate: +(Math.random() * 20 + 85).toFixed(1),
-        rpm: Math.floor(Math.random() * 400 + 2800),
+        pressure: +rnd(3, 7).toFixed(2),
+        temperature: +rnd(50, 80).toFixed(1),
+        vibration: +rnd(0.3, 1.8).toFixed(3),
+        flow_rate: +rnd(85, 105).toFixed(1),
+        rpm: rndInt(2800, 3200),
         status: 'OK',
       },
       source: 'demo',
@@ -305,16 +324,16 @@ const Sensors = (() => {
 
   async function injectDemo(type) {
     const payload = JSON.parse(JSON.stringify(demoData[type]));
-    // Refresh values each time
+    // Refresh with new non-security pseudorandom demo values each time
     if (type === 'irrigation') {
-      payload.data.soil_moisture = +(Math.random() * 60 + 20).toFixed(1);
-      payload.data.temperature   = +(Math.random() * 20 + 18).toFixed(1);
+      payload.data.soil_moisture = +rnd(20, 80).toFixed(1);
+      payload.data.temperature   = +rnd(18, 38).toFixed(1);
     } else if (type === 'hospital') {
-      payload.data.heart_rate = Math.floor(Math.random() * 40 + 65);
-      payload.data.oxygen     = +(Math.random() * 4 + 96).toFixed(1);
+      payload.data.heart_rate = rndInt(65, 105);
+      payload.data.oxygen     = +rnd(96, 100).toFixed(1);
     } else if (type === 'industrial') {
-      payload.data.pressure = +(Math.random() * 4 + 3).toFixed(2);
-      payload.data.rpm      = Math.floor(Math.random() * 400 + 2800);
+      payload.data.pressure = +rnd(3, 7).toFixed(2);
+      payload.data.rpm      = rndInt(2800, 3200);
     }
     try {
       await http.post('/sensor/ingest', payload);

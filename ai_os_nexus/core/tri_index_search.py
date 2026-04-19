@@ -349,7 +349,7 @@ class TriIndexSearch:
         top_k: int = 10,
     ) -> list[SearchResult]:
         """Merged hybrid search with TTL-cached results."""
-        cache_key = hashlib.md5(f"{query}|{user_id}|{top_k}".encode()).hexdigest()
+        cache_key = hashlib.sha256(f"{query}|{user_id}|{top_k}".encode()).hexdigest()
         cached = self._cache.get(cache_key)
         if cached and (time.time() - cached[0]) < CACHE_TTL:
             return cached[1]
