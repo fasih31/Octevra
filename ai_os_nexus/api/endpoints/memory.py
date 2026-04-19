@@ -1,6 +1,8 @@
 """
 /memory endpoints — view, create, delete, and export user memories.
 All operations enforce per-user isolation.
+
+© 2026 Fasih ur Rehman. All Rights Reserved.
 """
 
 from __future__ import annotations
@@ -11,6 +13,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
+from ai_os_nexus.core.audit_log import AuditEvent, get_audit_log
 from ai_os_nexus.core.memory_manager import MemoryManager, MemoryMode
 from ai_os_nexus.core.consent_engine import ConsentEngine
 
@@ -20,6 +23,7 @@ router = APIRouter(prefix="/memory", tags=["memory"])
 
 _memory = MemoryManager()
 _consent = ConsentEngine()
+_audit = get_audit_log()
 
 
 class StoreMemoryRequest(BaseModel):
@@ -75,6 +79,13 @@ async def store_memory(body: StoreMemoryRequest):
         ttl_seconds=body.ttl_seconds,
         metadata=body.metadata,
     )
+    _audit.log(
+        AuditEvent.MEMORY_STORE,
+        actor=body.user_id,
+        target=memory_id,
+        status="ok",
+        metadata={"mode": body.mode, "content": body.content},
+    )
     return {"memory_id": memory_id, "stored": True, "message": "Memory stored successfully"}
 
 
@@ -82,6 +93,13 @@ async def store_memory(body: StoreMemoryRequest):
 async def delete_user_memories(user_id: str):
     """Delete ALL memories for a user (GDPR right to erasure)."""
     count = _memory.delete_user_data(user_id)
+    _audit.log(
+        AuditEvent.MEMORY_DELETE_ALL,
+        actor=user_id,
+        target=user_id,
+        status="ok",
+        metadata={"deleted_count": count},
+    )
     return {"deleted": count, "user_id": user_id, "message": f"Deleted {count} memory entries"}
 
 
@@ -91,6 +109,12 @@ async def delete_single_memory(user_id: str, memory_id: str):
     deleted = _memory.delete_memory(memory_id, user_id)
     if not deleted:
         raise HTTPException(status_code=404, detail="Memory not found or access denied")
+    _audit.log(
+        AuditEvent.MEMORY_DELETE,
+        actor=user_id,
+        target=memory_id,
+        status="ok",
+    )
     return {"deleted": True, "memory_id": memory_id}
 
 
@@ -98,4 +122,11 @@ async def delete_single_memory(user_id: str, memory_id: str):
 async def export_memories(user_id: str):
     """Export all memories for a user (GDPR data portability)."""
     data = _memory.export_user_data(user_id)
+    _audit.log(
+        AuditEvent.MEMORY_EXPORT,
+        actor=user_id,
+        target=user_id,
+        status="ok",
+        metadata={"exported_count": len(data)},
+    )
     return {"user_id": user_id, "count": len(data), "memories": data}

@@ -1,12 +1,15 @@
 """
-Main FastAPI application for AI-OS Nexus.
+Main FastAPI application for Octevra AI-OS Nexus.
 Serves the REST API and static frontend.
 Start with: uvicorn ai_os_nexus.api.main_api:app --reload
+
+© 2026 Fasih ur Rehman. All Rights Reserved.
 """
 
 from __future__ import annotations
 
 import logging
+import os
 import time
 import uuid
 from contextlib import asynccontextmanager
@@ -27,6 +30,14 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s — %(message)s",
 )
 logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# CORS configuration — read allowed origins from environment.
+# Default is localhost for development; override via CORS_ORIGINS env var
+# (comma-separated list of origins, e.g. "https://app.example.com").
+# ---------------------------------------------------------------------------
+_raw_origins = os.environ.get("CORS_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000")
+ALLOWED_ORIGINS: list[str] = [o.strip() for o in _raw_origins.split(",") if o.strip()]
 
 # ---------------------------------------------------------------------------
 # Lifespan
@@ -65,12 +76,13 @@ async def lifespan(app: FastAPI):
 # ---------------------------------------------------------------------------
 
 app = FastAPI(
-    title="AI-OS Nexus",
+    title="Octevra AI-OS Nexus",
     description=(
-        "A dual-mode AI operating system — public knowledge assistant + "
-        "private AI OS with IoT integration, consent-based memory, and hybrid search."
+        "Octevra AI-OS Nexus — a dual-mode AI operating system: public knowledge "
+        "assistant + private AI OS with IoT integration, consent-based memory, and "
+        "hybrid search. © 2026 Fasih ur Rehman. All Rights Reserved."
     ),
-    version="1.0.0",
+    version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan,
@@ -82,14 +94,48 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "X-Request-ID"],
 )
 
 # ---------------------------------------------------------------------------
-# Request ID middleware
+# Security headers middleware
+# ---------------------------------------------------------------------------
+
+@app.middleware("http")
+async def security_headers_middleware(request: Request, call_next):
+    """Add security-hardening HTTP headers to every response."""
+    response: Response = await call_next(request)
+    # Prevent MIME-type sniffing
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    # Deny framing (clickjacking protection)
+    response.headers["X-Frame-Options"] = "DENY"
+    # Basic XSS protection header (legacy browsers)
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    # Strict referrer policy
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    # Content Security Policy — restrict to same origin; allow inline styles
+    # for the dark-theme SPA (no external resources loaded)
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self'; "
+        "style-src 'self' 'unsafe-inline'; "
+        "img-src 'self' data:; "
+        "font-src 'self'; "
+        "connect-src 'self'; "
+        "frame-ancestors 'none';"
+    )
+    # Permissions policy — disable unnecessary browser features
+    response.headers["Permissions-Policy"] = (
+        "camera=(), microphone=(), geolocation=(), payment=()"
+    )
+    return response
+
+
+# ---------------------------------------------------------------------------
+# Request ID + latency middleware
 # ---------------------------------------------------------------------------
 
 @app.middleware("http")

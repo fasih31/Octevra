@@ -1,5 +1,8 @@
 """
-/admin endpoints — system health, stats, safety overrides, maintenance.
+/admin endpoints — system health, stats, safety overrides, maintenance,
+and compliance/audit reporting.
+
+© 2026 Fasih ur Rehman. All Rights Reserved.
 """
 
 from __future__ import annotations
@@ -12,6 +15,7 @@ import time
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
+from ai_os_nexus.core.audit_log import AuditEvent, get_audit_log
 from ai_os_nexus.core.memory_manager import MemoryManager
 from ai_os_nexus.core.safety_layer import SafetyLayer
 from ai_os_nexus.dataset.dataset_manager import DatasetManager
@@ -25,6 +29,7 @@ _memory = MemoryManager()
 _safety = SafetyLayer()
 _dataset = DatasetManager()
 _sensors = SensorManager()
+_audit = get_audit_log()
 
 _start_time = time.time()
 
@@ -41,7 +46,9 @@ async def health():
     uptime = time.time() - _start_time
     return {
         "status": "healthy",
-        "version": "1.0.0",
+        "product": "Octevra AI-OS Nexus",
+        "version": "2.0.0",
+        "copyright": "© 2026 Fasih ur Rehman. All Rights Reserved.",
         "uptime_seconds": round(uptime, 2),
         "uptime_human": _format_uptime(uptime),
         "platform": platform.system(),
@@ -52,6 +59,7 @@ async def health():
             "safety_layer": "ok",
             "dataset": "ok",
             "sensor_api": "ok",
+            "audit_log": "ok",
         },
     }
 
@@ -76,6 +84,13 @@ async def safety_override(body: SafetyOverrideRequest):
         action_id=body.action_id,
         admin_id=body.admin_id,
         reason=body.reason,
+    )
+    _audit.log(
+        AuditEvent.SAFETY_OVERRIDE,
+        actor=body.admin_id,
+        target=body.action_id,
+        status="override",
+        metadata={"reason": body.reason},
     )
     logger.warning(
         "Safety override: action=%s admin=%s reason=%s",
@@ -111,6 +126,12 @@ async def list_overrides():
 async def purge_expired_memories():
     """Delete all expired memory entries."""
     count = _memory.delete_expired()
+    _audit.log(
+        AuditEvent.ADMIN_PURGE,
+        actor="system",
+        status="ok",
+        metadata={"deleted_count": count},
+    )
     return {"deleted": count, "message": f"Purged {count} expired memory entries"}
 
 
@@ -123,11 +144,51 @@ async def dataset_stats():
 @router.get("/dataset/export")
 async def export_dataset(category: str | None = None):
     """Export dataset entries (optionally filtered by category)."""
+    _audit.log(
+        AuditEvent.ADMIN_EXPORT_DATASET,
+        actor="admin",
+        status="ok",
+        metadata={"category": category or "all"},
+    )
     data = _dataset.export_dataset(category=category)
     return {
         "category": category or "all",
         "count": len(data),
         "entries": data,
+    }
+
+
+@router.get("/audit")
+async def audit_recent(limit: int = 50, event: str | None = None):
+    """
+    Recent audit log entries.
+
+    Returns up to *limit* recent records (max 200), newest first.
+    Sensitive field values are already masked in the store — payloads are safe.
+    Optionally filter by *event* type (e.g. 'memory.store').
+    """
+    limit = min(limit, 200)
+    records = _audit.recent(limit=limit, event_filter=event)
+    return {
+        "count": len(records),
+        "limit": limit,
+        "event_filter": event,
+        "records": records,
+    }
+
+
+@router.get("/audit/compliance")
+async def audit_compliance():
+    """
+    Compliance/audit summary — aggregate counts and retention info.
+    No sensitive payloads are returned.
+    """
+    stats = _audit.compliance_stats()
+    return {
+        "product": "Octevra AI-OS Nexus",
+        "copyright": "© 2026 Fasih ur Rehman. All Rights Reserved.",
+        "generated_at": time.time(),
+        **stats,
     }
 
 

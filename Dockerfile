@@ -1,10 +1,15 @@
 # ============================================================
-# AI-OS Nexus — Dockerfile
+# Octevra AI-OS Nexus — Dockerfile
+# © 2026 Fasih ur Rehman. All Rights Reserved.
 # ============================================================
 FROM python:3.11-slim
 
-LABEL maintainer="AI-OS Nexus Team"
-LABEL description="AI-OS Nexus — Dual-mode AI Operating System"
+LABEL maintainer="Fasih ur Rehman"
+LABEL org.opencontainers.image.title="Octevra AI-OS Nexus"
+LABEL org.opencontainers.image.description="Octevra AI-OS Nexus — Dual-mode AI Operating System"
+LABEL org.opencontainers.image.vendor="Fasih ur Rehman"
+LABEL org.opencontainers.image.version="2.0.0"
+LABEL org.opencontainers.image.licenses="Proprietary"
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
